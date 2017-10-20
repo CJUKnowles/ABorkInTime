@@ -47,11 +47,11 @@ public class GameManager extends AbstractGame {
 	public GameManager() {
 		player = new Player(8, 8);
 		getObjects().add(player);
-		level = new Image("/level.png");
-		loadLevel("/level.png");
+		level = new Image("/level2.png");
+		loadLevel("/level2.png");
 		camera = new Camera(EntityType.player);
 		dirt = new ImageTile("/dirtTileset.png", 32, 32);
-		background = new Image("/background.png");
+		background = new Image("/background2.png");
 		midground = new Image("/midground.png");
 		platform = new Image("/platform.png");
 		lava = new ImageTile("/lava.png", 32, 32);
@@ -101,6 +101,8 @@ public class GameManager extends AbstractGame {
 		for(int i = 0; i < (levelW * 32)/background.getW() * 2; i++) { //add 1 to i < x if drawing one too few backgrounds
 			r.drawImage(midground, (int) (i * midground.getW() + camera.getOffX() * camera.getMidgroundSpeed()), 0);
 		}
+		
+		//r.drawFillRect(0, 0, level.getH() * 32, level.getW() * 32, 0xff00ffff);
 
 		for (int y = 0; y < levelH; y++)  {
 			for (int x = 0; x < levelW; x++) {
@@ -220,7 +222,7 @@ public class GameManager extends AbstractGame {
 		for (int y = 0; y < levelImage.getH(); y++) {
 			for (int x = 0; x < levelImage.getW(); x++) {
 
-				if (levelImage.getP()[x + y * levelImage.getW()] == Color.PINK.getRGB()) {
+				if (levelImage.getP()[x + y * levelImage.getW()] == 0xffff00ff) {
 					collision[x + y * levelImage.getW()] = -100;// player
 				} else if (levelImage.getP()[x + y * levelImage.getW()] == Color.BLACK.getRGB()) {// black
 					collision[x + y * levelImage.getW()] = 1; // collision block

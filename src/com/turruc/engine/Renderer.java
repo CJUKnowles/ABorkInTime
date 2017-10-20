@@ -149,7 +149,7 @@ public class Renderer {
 
 	public void drawText(String text, int offX, int offY, int color) {
 		offX -= camX;
-		offY -= camY;
+		//offY -= camY;
 		int offset = 0;
 
 		for (int i = 0; i < text.length(); i++) {

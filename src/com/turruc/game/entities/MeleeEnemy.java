@@ -20,10 +20,10 @@ public class MeleeEnemy extends GameObject {
 	private float speed = normalSpeed;
 
 	private float fallDistance = 0;
-	private float normalFallSpeed = 20;
+	private float normalFallSpeed = 25;
 	private float slowFallSpeed = normalFallSpeed / slowMotion;
 	private float fallSpeed = normalFallSpeed;
-	private float jump = -9; // must be negative
+	private float jump = -10; // must be negative
 	private boolean ground = false;
 	private boolean groundLast = false;
 
@@ -326,4 +326,12 @@ public class MeleeEnemy extends GameObject {
 		this.health = health;
 	}
 
+	public float getTileX() {
+        return tileX;
+    }
+
+    public float getTileY() {
+        return tileY;
+    }
+	
 }

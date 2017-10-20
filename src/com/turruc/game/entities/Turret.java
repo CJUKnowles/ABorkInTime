@@ -144,4 +144,12 @@ public class Turret extends GameObject {
 		boof.play();
 	}
 
+	public float getTileX() {
+        return tileX;
+    }
+
+    public float getTileY() {
+        return tileY;
+    }
+	
 }
