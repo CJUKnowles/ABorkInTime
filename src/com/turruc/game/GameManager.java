@@ -94,11 +94,11 @@ public class GameManager extends AbstractGame {
 		anim %= 4;
 
 		// Start of drawing map
-		for(int i = 0; i < (levelW * 32)/background.getW(); i++) { //add 1 to i < x if drawing one too few backgrounds
+		for(int i = 0; i < (levelW * 32)/background.getW() * 2; i++) { //add 1 to i < x if drawing one too few backgrounds
 			r.drawImage(background, (int) (i * background.getW() + camera.getOffX() * camera.getBackgroundSpeed()), 0);
 		}
 
-		for(int i = 0; i < (levelW * 32)/background.getW(); i++) { //add 1 to i < x if drawing one too few backgrounds
+		for(int i = 0; i < (levelW * 32)/background.getW() * 2; i++) { //add 1 to i < x if drawing one too few backgrounds
 			r.drawImage(midground, (int) (i * midground.getW() + camera.getOffX() * camera.getMidgroundSpeed()), 0);
 		}
 
@@ -108,7 +108,7 @@ public class GameManager extends AbstractGame {
 				if (collision[x + y * levelW] == 1) {
 					if (y != 0 && y != levelH - 1 && x != 0 && x != levelW) {
 						if (!getContact(x, y - 1) && getContact(x - 1, y) && getCollision(x, y + 1) && getContact(x + 1, y)) {
-							dirt.getTileImage(0, 0).setLightBlock(Light.FULL);
+							//dirt.getTileImage(0, 0).setLightBlock(Light.FULL);
 							r.drawImageTile(dirt, x * TS, y * TS, 0, 0); // up
 						} else if (getContact(x, y- 1) && !getContact(x - 1, y) && getCollision(x, y + 1) && getContact(x + 1, y)) {
 							r.drawImageTile(dirt, x * TS, y * TS, 1, 0); // left

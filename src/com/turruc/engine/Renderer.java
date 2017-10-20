@@ -30,7 +30,7 @@ public class Renderer {
 	private int ambientColor = 0xff232323;
 	private int zDepth = 0;
 	private boolean processing = false;
-	private int camX, camY;
+	private float camX, camY;
 
 	public Renderer(GameContainer gc) {
 		pW = gc.getWidth();
@@ -456,19 +456,19 @@ public class Renderer {
 		this.ambientColor = ambientColor;
 	}
 
-	public int getCamX() {
+	public float getCamX() {
 		return camX;
 	}
 
-	public void setCamX(int camX) {
+	public void setCamX(float camX) {
 		this.camX = camX;
 	}
 
-	public int getCamY() {
+	public float getCamY() {
 		return camY;
 	}
 
-	public void setCamY(int camY) {
+	public void setCamY(float camY) {
 		this.camY = camY;
 	}
 
