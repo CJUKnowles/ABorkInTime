@@ -1,7 +1,5 @@
 package com.turruc.game.screens;
 
-import javax.sound.sampled.Clip;
-
 import com.turruc.engine.AbstractGame;
 import com.turruc.engine.GameContainer;
 import com.turruc.engine.Renderer;
