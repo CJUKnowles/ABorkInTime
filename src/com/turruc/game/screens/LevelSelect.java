@@ -66,7 +66,7 @@ public class LevelSelect extends AbstractGame {
 				if(levelToLoad!=null) {
 					levelToLoad.loadLevel(GameManager.gm);
 					GameManager.gm.level = levelToLoad;
-					gc.gameState = GameState.MENU;					
+					gc.gameState = GameState.GAME;					
 				}
 			}
 			for (int i = 0; i < 12; i++) {
@@ -76,7 +76,6 @@ public class LevelSelect extends AbstractGame {
 
 						levelToLoad = levels[i];
 						selected = i;
-						System.out.println("test");
 					}
 				}
 			}
