@@ -1,5 +1,8 @@
 package com.turruc.engine;
 
+import com.turruc.game.GameState;
+import com.turruc.game.screens.Menu;
+
 public class GameContainer implements Runnable {
 
 	private Thread thread;
@@ -8,6 +11,10 @@ public class GameContainer implements Runnable {
 	private Input input;
 	private AbstractGame game;
 
+	public GameState gameState = GameState.MENU;
+	
+	Menu menu = new Menu();
+	
 	private boolean running = false;
 	private final double UPDATE_CAP = 1.0 / 60.0;
 	// 640x480
@@ -64,7 +71,11 @@ public class GameContainer implements Runnable {
 				unprocessedTime -= UPDATE_CAP;
 				render = true;
 
-				game.update(this, (float) UPDATE_CAP);
+				if(gameState == GameState.GAME) {
+					game.update(this, (float) UPDATE_CAP);	
+				} else if(gameState == GameState.MENU) {
+					menu.update(this, (float) UPDATE_CAP);	
+				}
 
 				input.update();
 
@@ -77,7 +88,11 @@ public class GameContainer implements Runnable {
 
 			if (render) {
 				renderer.clear();
+				if(gameState == GameState.GAME) {
 				game.render(this, renderer);
+				} else if(gameState == GameState.MENU) {
+					menu.render(this, renderer);
+				}
 				renderer.process();
 				renderer.setCamX(0);
 				renderer.setCamY(0);

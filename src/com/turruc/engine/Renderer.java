@@ -166,6 +166,17 @@ public class Renderer {
 			offset += font.getWidths()[unicode];
 		}
 	}
+	
+	public int getTextLength(String text) {
+		int offset = 0;
+		
+		for (int i = 0; i < text.length(); i++) {
+			int unicode = text.codePointAt(i);
+			offset += font.getWidths()[unicode];
+		}
+		
+		return offset;
+	}
 
 	public void drawImage(Image image, int offX, int offY) {
 		offX -= camX;
