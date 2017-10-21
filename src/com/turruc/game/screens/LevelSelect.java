@@ -76,7 +76,7 @@ public class LevelSelect extends AbstractGame {
 
 						levelToLoad = levels[i];
 						selected = i;
-						System.out.println("testing");
+						System.out.println("test");
 					}
 				}
 			}
