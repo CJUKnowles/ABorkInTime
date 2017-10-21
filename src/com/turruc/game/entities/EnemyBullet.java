@@ -36,8 +36,8 @@ public class EnemyBullet extends GameObject {
 	}
 
 	@Override
-	public void update(GameContainer gc, GameManager gm, float dt) {
-		if (gm.getPlayer().isSlow()) {
+	public void update(GameContainer gc, float dt) {
+		if (GameManager.gm.getPlayer().isSlow()) {
 
 			speed = slowSpeed;
 		} else {
@@ -71,7 +71,7 @@ public class EnemyBullet extends GameObject {
 			offX += GameManager.TS;
 		}
 
-		if (gm.getCollisionNum(tileX, tileY) == 1) {
+		if (GameManager.gm.getCollisionNum(tileX, tileY) == 1) {
 			this.dead = true;
 		}
 
@@ -92,6 +92,12 @@ public class EnemyBullet extends GameObject {
 	@Override
 	public void render(GameContainer gc, Renderer r) {
 		r.drawImage(r.transformImage(bullet.getBufferedImage(), (int) Math.toDegrees(angle2)), (int) posX, (int) posY);
+	}
+
+	@Override
+	public void dispose() {
+		bullet.dispose();
+		bullet = null;
 	}
 
 }

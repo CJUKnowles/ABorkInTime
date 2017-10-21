@@ -113,4 +113,12 @@ public class Camera {
 	public void setMidgroundSpeed(float midgroundSpeed) {
 		this.midgroundSpeed = midgroundSpeed;
 	}
+
+	public float getScrollSpeed() {
+		return scrollSpeed;
+	}
+
+	public void setScrollSpeed(float scrollSpeed) {
+		this.scrollSpeed = scrollSpeed;
+	}
 }

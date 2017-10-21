@@ -35,8 +35,10 @@ public class ResourceBall extends GameObject {
 	}
 
 	@Override
-	public void update(GameContainer gc, GameManager gm, float dt) {
-		if (gm.getPlayer().isSlow()) {
+	public void update(GameContainer gc, float dt) {
+		
+		
+		if (GameManager.gm.getPlayer().isSlow()) {
 			animationSpeed = slowAnimationSpeed;
 		} else {
 			animationSpeed = normalAnimationSpeed;
@@ -70,4 +72,13 @@ public class ResourceBall extends GameObject {
     public float getTileY() {
         return tileY;
     }
+
+	@Override
+	public void dispose() {
+		// TODO Auto-generated method stub
+		image.dispose();
+		image = null;
+		woosh.close();
+		woosh = null;
+	}
 }

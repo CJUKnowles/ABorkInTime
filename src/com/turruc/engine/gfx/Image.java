@@ -88,5 +88,11 @@ public class Image {
 	public void setBufferedImage(BufferedImage bufferedImage) {
 		this.bufferedImage = bufferedImage;
 	}
+	
+	public void dispose() {
+		path = null;
+		bufferedImage.flush();
+		bufferedImage = null;
+	}
 
 }

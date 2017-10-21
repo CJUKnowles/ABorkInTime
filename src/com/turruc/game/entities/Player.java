@@ -7,6 +7,7 @@ import com.turruc.engine.Renderer;
 import com.turruc.engine.audio.SoundClip;
 import com.turruc.engine.gfx.ImageTile;
 import com.turruc.game.GameManager;
+import com.turruc.game.GameState;
 
 public class Player extends GameObject {
 	private ImageTile player = new ImageTile("/player.png", 32, 32);
@@ -44,9 +45,9 @@ public class Player extends GameObject {
 	private int teleportCost = 30;
 	private double slowMotionCost = 0.5;
 	private int slowMotionCooldown = 1; // in seconds
-	
+
 	private float ladderSpeed = (float) .5;
-	
+
 	private int normalAnimationSpeed = 10;
 	private int slowAnimationSpeed = normalAnimationSpeed / slowMotion;
 	private int animationSpeed = normalAnimationSpeed;
@@ -64,7 +65,7 @@ public class Player extends GameObject {
 
 	private boolean attacking = false;
 	private float attackAnim = 4;
-	
+
 	private SoundClip ow;
 	private SoundClip pew;
 	private SoundClip woosh;
@@ -84,7 +85,7 @@ public class Player extends GameObject {
 
 		this.padding = 4;
 		this.paddingTop = 0;
-		
+
 		ow = new SoundClip("/audio/ow.wav");
 		pew = new SoundClip("/audio/pew.wav");
 		woosh = new SoundClip("/audio/woosh.wav");
@@ -93,7 +94,7 @@ public class Player extends GameObject {
 	}
 
 	@Override
-	public void update(GameContainer gc, GameManager gm, float dt) {
+	public void update(GameContainer gc, float dt) {
 		if (health == 0) {
 			boof.play();
 			// this.dead = true;
@@ -107,7 +108,7 @@ public class Player extends GameObject {
 		}
 
 		// slow motion
-		if (gc.getInput().isKey(KeyEvent.VK_CONTROL) && gm.getPlayer().getMana() > gm.getPlayer().getSlowMotionCost() && (System.nanoTime() / 1000000000.0) - lastTimeSlowUsed > slowMotionCooldown) {
+		if (gc.getInput().isKey(KeyEvent.VK_CONTROL) && GameManager.gm.getPlayer().getMana() > GameManager.gm.getPlayer().getSlowMotionCost() && (System.nanoTime() / 1000000000.0) - lastTimeSlowUsed > slowMotionCooldown) {
 			checkSlow = false;
 			slow = true;
 			mana -= slowMotionCost;
@@ -129,18 +130,18 @@ public class Player extends GameObject {
 		}
 
 		// lava damage
-		if (gm.getCollisionNum((int) tileX, (int) tileY) == 3 && (System.nanoTime() / 1000000000.0) - lastTimeLavaDamage > lavaDamageCooldown) {
+		if (GameManager.gm.getCollisionNum((int) tileX, (int) tileY) == 3 && (System.nanoTime() / 1000000000.0) - lastTimeLavaDamage > lavaDamageCooldown) {
 			lastTimeLavaDamage = System.nanoTime() / 1000000000.0;
 			hit(lavaDamage);
 		}
 		// end lava damage
 
 		// Lava Slow
-		if (gm.getCollisionNum((int) tileX, (int) tileY) == 3 && !slow) {
+		if (GameManager.gm.getCollisionNum((int) tileX, (int) tileY) == 3 && !slow) {
 			speed = slowSpeed * 3;
 			fallSpeed = slowFallSpeed * 3;
 			animationSpeed = slowAnimationSpeed * 3;
-		} else if (gm.getCollisionNum((int) tileX, (int) tileY) == 3 && slow) {
+		} else if (GameManager.gm.getCollisionNum((int) tileX, (int) tileY) == 3 && slow) {
 			speed = (slowSpeed * 3) / slowMotion;
 			fallSpeed = (slowFallSpeed * 3) / slowMotion;
 			animationSpeed = (slowAnimationSpeed * 3) / slowMotion;
@@ -152,14 +153,14 @@ public class Player extends GameObject {
 		// end lava slow
 
 		// resource balls
-		if (gm.getCollisionNum((int) tileX, (int) tileY) == -1 || gm.getCollisionNum((int) tileX, (int) tileY) == -2) {
+		if (GameManager.gm.getCollisionNum((int) tileX, (int) tileY) == -1 || GameManager.gm.getCollisionNum((int) tileX, (int) tileY) == -2) {
 
 			for (int i = 0; i < GameManager.getObjects().size(); i++) {
 				if (GameManager.getObjects().get(i).getTag().equals(EntityType.resourceBall)) {
 					if (Math.abs(posX - GameManager.getObjects().get(i).getPosX()) <= 32 && Math.abs(posY - GameManager.getObjects().get(i).getPosY()) <= 32) {
 						GameManager.getObjects().get(i).setDead(true);
 						break;
-						// i = gm.getObjects().size();
+						// i = GameManager.gm.getObjects().size();
 					}
 				}
 			}
@@ -195,38 +196,38 @@ public class Player extends GameObject {
 			attacking = true;
 			vshh.play();
 		}
-		
-		if(attacking) {
+
+		if (attacking) {
 			if (direction == 0) {
 				for (int i = 0; i < GameManager.getObjects().size(); i++) {
 					if (GameManager.getObjects().get(i).getTag().equals(EntityType.turret) || GameManager.getObjects().get(i).getTag().equals(EntityType.meleeEnemy)) {
 						if (checkContact(this.posX + 20, this.posY, GameManager.getObjects().get(i).getPosX(), GameManager.getObjects().get(i).getPosY())) {
 							GameManager.getObjects().get(i).setDead(true);
 							break;
-							// i = gm.getObjects().size();
+							// i = GameManager.gm.getObjects().size();
 						}
 					}
-				
-			}
-		} else if (direction == 1) {
-			for (int i = 0; i < GameManager.getObjects().size(); i++) {
-				if (GameManager.getObjects().get(i).getTag().equals(EntityType.turret) || GameManager.getObjects().get(i).getTag().equals(EntityType.meleeEnemy)) {
-					if (checkContact(this.posX - 20, this.posY, GameManager.getObjects().get(i).getPosX(), GameManager.getObjects().get(i).getPosY())) {
-						GameManager.getObjects().get(i).setDead(true);
-						break;
-						// i = gm.getObjects().size();
-					}
+
 				}
-			
-		}
-		}
+			} else if (direction == 1) {
+				for (int i = 0; i < GameManager.getObjects().size(); i++) {
+					if (GameManager.getObjects().get(i).getTag().equals(EntityType.turret) || GameManager.getObjects().get(i).getTag().equals(EntityType.meleeEnemy)) {
+						if (checkContact(this.posX - 20, this.posY, GameManager.getObjects().get(i).getPosX(), GameManager.getObjects().get(i).getPosY())) {
+							GameManager.getObjects().get(i).setDead(true);
+							break;
+							// i = GameManager.gm.getObjects().size();
+						}
+					}
+
+				}
+			}
 		}
 		// end melee
 
 		// Beginning Left and right
 		if (gc.getInput().isKey(KeyEvent.VK_D)) {
 
-			if (gm.getCollision(tileX + 1, tileY) || gm.getCollision(tileX + 1, tileY + (int) Math.signum((int) offY))) {
+			if (GameManager.gm.getCollision(tileX + 1, tileY) || GameManager.gm.getCollision(tileX + 1, tileY + (int) Math.signum((int) offY))) {
 
 				offX += dt * speed;
 				if (offX > padding) {
@@ -240,7 +241,7 @@ public class Player extends GameObject {
 		}
 
 		if (gc.getInput().isKey(KeyEvent.VK_A)) {
-			if (gm.getCollision(tileX - 1, tileY) || gm.getCollision(tileX - 1, tileY + (int) Math.signum((int) offY))) {
+			if (GameManager.gm.getCollision(tileX - 1, tileY) || GameManager.gm.getCollision(tileX - 1, tileY + (int) Math.signum((int) offY))) {
 				offX -= dt * speed;
 				if (offX < -padding) {
 					tileX += offX / GameManager.TS + 1;
@@ -252,27 +253,28 @@ public class Player extends GameObject {
 			}
 		}
 		// End left and right
-		
+
 		// Beginning Jump and Gravity
 
-		//beginning ladder
-		if(gm.getCollisionNum((int) tileX, (int) tileY) == 5) {
+		// beginning ladder
+		if (GameManager.gm.getCollisionNum((int) tileX, (int) tileY) == 5) {
 			fallSpeed = 0;
 			fallDistance = 0;
-			if(gc.getInput().isKey(KeyEvent.VK_W)) {
+			ground = false;
+			if (gc.getInput().isKey(KeyEvent.VK_W)) {
 				fallDistance += (jump * ladderSpeed);
-			} 
-			
-			if(gc.getInput().isKey(KeyEvent.VK_S)) {
+			}
+
+			if (gc.getInput().isKey(KeyEvent.VK_S)) {
 				fallDistance -= (jump * ladderSpeed);
 			}
 		}
-		//end ladder
-		
-		if(gc.getInput().isKey(KeyEvent.VK_S) && !ground) {
-			fallSpeed = fallSpeed * 3;  
+		// end ladder
+
+		if (gc.getInput().isKey(KeyEvent.VK_S) && !ground) {
+			fallSpeed = fallSpeed * 3;
 		}
-		
+
 		fallDistance += dt * fallSpeed;
 
 		if ((gc.getInput().isKeyDown(KeyEvent.VK_W) || gc.getInput().isKeyDown(KeyEvent.VK_SPACE)) && ground) {
@@ -280,7 +282,7 @@ public class Player extends GameObject {
 			ground = false;
 		}
 
-		if (gc.getInput().isKey(KeyEvent.VK_CONTROL) && gm.getPlayer().getMana() > gm.getPlayer().getSlowMotionCost() && (System.nanoTime() / 1000000000.0) - lastTimeSlowUsed > slowMotionCooldown) {
+		if (gc.getInput().isKey(KeyEvent.VK_CONTROL) && GameManager.gm.getPlayer().getMana() > GameManager.gm.getPlayer().getSlowMotionCost() && (System.nanoTime() / 1000000000.0) - lastTimeSlowUsed > slowMotionCooldown) {
 			offY += fallDistance / slowMotion;
 		} else {
 			offY += fallDistance;
@@ -288,7 +290,7 @@ public class Player extends GameObject {
 		}
 
 		if (fallDistance < 0) {
-			if ((gm.getCollision(tileX, tileY - 1) || gm.getCollision(tileX + (int) Math.signum((int) Math.abs(offX) > padding ? offX : 0), tileY - 1)) && offY < -paddingTop) {
+			if ((GameManager.gm.getCollision(tileX, tileY - 1) || GameManager.gm.getCollision(tileX + (int) Math.signum((int) Math.abs(offX) > padding ? offX : 0), tileY - 1)) && offY < -paddingTop) {
 				fallDistance = 0;
 				offY = -paddingTop;
 			}
@@ -296,20 +298,19 @@ public class Player extends GameObject {
 
 		if (fallDistance > 0) {
 
-			if ((gm.getCollision(tileX, tileY + 1) || gm.getCollisionNum(tileX, tileY + 1) == 4 || gm.getCollision(tileX + (int) Math.signum((int) Math.abs(offX) > padding ? offX : 0), tileY + 1)) && offY > 0) {
+			if ((GameManager.gm.getCollision(tileX, tileY + 1) || GameManager.gm.getCollisionNum(tileX, tileY + 1) == 4 || GameManager.gm.getCollision(tileX + (int) Math.signum((int) Math.abs(offX) > padding ? offX : 0), tileY + 1)) && offY > 0) {
 				fallDistance = 0;
 				offY = 0;
 				ground = true;
 			}
 		}
-		
-		
-		//fallSpeed = normalFallSpeed;
-		//Falling through platforms
-		if(ground && gc.getInput().isKeyDown(KeyEvent.VK_S) && gm.getCollisionNum(tileX, tileY + 1) == 4) {
+
+		// fallSpeed = normalFallSpeed;
+		// Falling through platforms
+		if (ground && gc.getInput().isKeyDown(KeyEvent.VK_S) && GameManager.gm.getCollisionNum(tileX, tileY + 1) == 4) {
 			moveTo(this.posX, this.posY + 17);
 		}
-		//End of falling through platforms
+		// End of falling through platforms
 		// End Jump and Gravity
 
 		// teleporting
@@ -317,7 +318,7 @@ public class Player extends GameObject {
 			// teleport right
 			if (direction == 0) {
 				teleportX = ((tileX * GameManager.TS) + offX) + teleportRange;
-				while (gm.getCollision((int) (teleportX / GameManager.TS), (int) this.tileY) || gm.getCollision((int) (teleportX / GameManager.TS) + 1, (int) this.tileY)) {
+				while (GameManager.gm.getCollision((int) (teleportX / GameManager.TS), (int) this.tileY) || GameManager.gm.getCollision((int) (teleportX / GameManager.TS) + 1, (int) this.tileY)) {
 					teleportX--;
 					if (teleportX == posX) {
 						break;
@@ -332,13 +333,13 @@ public class Player extends GameObject {
 				// teleport left
 			} else {
 				teleportX = ((tileX * GameManager.TS) + offX) - teleportRange;
-				while (gm.getCollision((int) (teleportX / GameManager.TS), (int) this.tileY) || gm.getCollision((int) (teleportX / GameManager.TS) + 1, (int) this.tileY)) {
+				while (GameManager.gm.getCollision((int) (teleportX / GameManager.TS), (int) this.tileY) || GameManager.gm.getCollision((int) (teleportX / GameManager.TS) + 1, (int) this.tileY)) {
 					teleportX++;
 					if (teleportX == posX) {
 						break;
 					}
 
-					if (teleportX > gm.getLevelW() * GameManager.TS) {
+					if (teleportX > GameManager.gm.getLevelW() * GameManager.TS) {
 						teleportX--;
 						break;
 					}
@@ -349,7 +350,7 @@ public class Player extends GameObject {
 			teleportY = ((tileY * GameManager.TS) + offY);
 
 			// Move teleport location up, if it collides with floor
-			while (gm.getCollision((int) (teleportX + 16) / GameManager.TS, (int) ((teleportY) / GameManager.TS) + 1)) {
+			while (GameManager.gm.getCollision((int) (teleportX + 16) / GameManager.TS, (int) ((teleportY) / GameManager.TS) + 1)) {
 				teleportY--;
 				if (teleportY < 0) {
 					fallDistance = 0;
@@ -396,7 +397,7 @@ public class Player extends GameObject {
 		// shooting
 		if (gc.getInput().isButtonDown(1) && mana >= shootCost) { // isButton for semi auto, is buttondown for auto
 			mana -= shootCost;
-			gm.addObject(new Bullet((int) (gc.getInput().getMouseX() - 16 + gm.getCamera().getOffX()), (int) (gc.getInput().getMouseY() - 16 + gm.getCamera().getOffY()), tileX, tileY, offX, offY));
+			GameManager.gm.addObject(new Bullet((int) (gc.getInput().getMouseX() - 16 + GameManager.gm.getCamera().getOffX()), (int) (gc.getInput().getMouseY() - 16 + GameManager.gm.getCamera().getOffY()), tileX, tileY, offX, offY));
 			pew.play();
 		}
 		// end of shooting
@@ -430,6 +431,10 @@ public class Player extends GameObject {
 		// End of Animation
 
 		groundLast = ground;
+
+		if (gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) {
+			gc.gameState = GameState.MENU;
+		}
 	}
 
 	public void hit(int damage) {
@@ -482,7 +487,6 @@ public class Player extends GameObject {
 		this.offY = (int) (posY % GameManager.TS);
 	}
 
-	
 	public void setDead(boolean dead) {
 		this.dead = dead;
 		boof.play();
@@ -511,13 +515,30 @@ public class Player extends GameObject {
 	public void setHealth(int health) {
 		this.health = health;
 	}
-	
-	public float getTileX() {
-        return tileX;
-    }
 
-    public float getTileY() {
-        return tileY;
-    }
+	public float getTileX() {
+		return tileX;
+	}
+
+	public float getTileY() {
+		return tileY;
+	}
+
+	@Override
+	public void dispose() {
+		// TODO Auto-generated method stub
+		player.dispose();
+		player = null;
+		ow.close();
+		ow = null;
+		pew.close();
+		pew = null;
+		woosh.close();
+		woosh = null;
+		boof.close();
+		boof = null;
+		vshh.close();
+		vshh = null;
+	}
 
 }

@@ -55,6 +55,8 @@ public class SoundClip {//test
 		stop();
 		clip.drain();
 		clip.close();
+		clip = null;
+		gainControl = null;
 	}
 
 	public void loop() {

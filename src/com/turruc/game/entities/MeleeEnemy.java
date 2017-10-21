@@ -23,7 +23,7 @@ public class MeleeEnemy extends GameObject {
 	private float normalFallSpeed = 25;
 	private float slowFallSpeed = normalFallSpeed / slowMotion;
 	private float fallSpeed = normalFallSpeed;
-	private float jump = -10; // must be negative
+	private float jump = -7; // must be negative
 	private boolean ground = false;
 	private boolean groundLast = false;
 
@@ -55,7 +55,7 @@ public class MeleeEnemy extends GameObject {
 	private int manaReward = 20;
 	private int range = 60;
 
-	public MeleeEnemy(GameManager gm, int posX, int posY) {
+	public MeleeEnemy(int posX, int posY) {
 		this.tag = EntityType.meleeEnemy;
 		this.tileX = posX;
 		this.tileY = posY;
@@ -69,14 +69,14 @@ public class MeleeEnemy extends GameObject {
 		this.padding = 4;
 		this.paddingTop = 0;
 
-		player = gm.getPlayer();
+		player = GameManager.gm.getPlayer();
 
 		ugh = new SoundClip("/audio/ugh.wav");
 		boof = new SoundClip("/audio/boof.wav");
 	}
 
 	@Override
-	public void update(GameContainer gc, GameManager gm, float dt) {
+	public void update(GameContainer gc, float dt) {
 		if (health <= 0) {
 			boof.play();
 			this.dead = true;
@@ -89,9 +89,9 @@ public class MeleeEnemy extends GameObject {
 			this.tileY = 2;
 		}
 
-		if (new LOSBullet((int) player.getPosX(), (int) player.getPosY(), tileX, tileY, offX, offY, GameManager.getGc(), gm, GameManager.getGc().getDt(), range, true, true).LOS) {
+		if (new LOSBullet((int) player.getPosX(), (int) player.getPosY(), tileX, tileY, offX, offY, GameManager.getGc(), GameManager.getGc().getDt(), range, true, true).LOS) {
 			// slow motion
-			if (gm.getPlayer().isSlow()) {
+			if (GameManager.gm.getPlayer().isSlow()) {
 				speed = slowSpeed;
 				fallSpeed = slowFallSpeed;
 				animationSpeed = slowAnimationSpeed;
@@ -104,22 +104,22 @@ public class MeleeEnemy extends GameObject {
 			againstWall = true;
 
 			// lava damage
-			if (gm.getCollisionNum((int) tileX, (int) tileY) == 3 && (System.nanoTime() / 1000000000.0) - lastTimeLavaDamage > lavaDamageCooldown) {
+			if (GameManager.gm.getCollisionNum((int) tileX, (int) tileY) == 3 && (System.nanoTime() / 1000000000.0) - lastTimeLavaDamage > lavaDamageCooldown) {
 				lastTimeLavaDamage = System.nanoTime() / 1000000000.0;
 				hit(lavaDamage);
 			}
 			// end lava damage
 
 			// Lava Slow
-			if (gm.getCollisionNum((int) tileX, (int) tileY) == 3 && !gm.getPlayer().isSlow()) {
+			if (GameManager.gm.getCollisionNum((int) tileX, (int) tileY) == 3 && !GameManager.gm.getPlayer().isSlow()) {
 				speed = slowSpeed * 3;
 				fallSpeed = slowFallSpeed * 3;
 				animationSpeed = slowAnimationSpeed * 3;
-			} else if (gm.getCollisionNum((int) tileX, (int) tileY) == 3 && gm.getPlayer().isSlow()) {
+			} else if (GameManager.gm.getCollisionNum((int) tileX, (int) tileY) == 3 && GameManager.gm.getPlayer().isSlow()) {
 				speed = (slowSpeed * 3) / slowMotion;
 				fallSpeed = (slowFallSpeed * 3) / slowMotion;
 				animationSpeed = (slowAnimationSpeed * 3) / slowMotion;
-			} else if (!gm.getPlayer().isSlow()) {
+			} else if (!GameManager.gm.getPlayer().isSlow()) {
 				speed = normalSpeed;
 				fallSpeed = normalFallSpeed;
 				animationSpeed = normalAnimationSpeed;
@@ -143,8 +143,8 @@ public class MeleeEnemy extends GameObject {
 			}
 
 			// Beginning Left and right
-			if (gm.getPlayer().getPosX() > this.posX) {
-				if (gm.getCollision(tileX + 1, tileY) || gm.getCollision(tileX + 1, tileY + (int) Math.signum((int) offY))) {
+			if (GameManager.gm.getPlayer().getPosX() > this.posX) {
+				if (GameManager.gm.getCollision(tileX + 1, tileY) || GameManager.gm.getCollision(tileX + 1, tileY + (int) Math.signum((int) offY))) {
 					offX += dt * speed;
 					if (offX > padding) {
 						tileX += offX / GameManager.TS;
@@ -157,8 +157,8 @@ public class MeleeEnemy extends GameObject {
 				}
 			}
 
-			if (gm.getPlayer().getPosX() < this.posX) {
-				if (gm.getCollision(tileX - 1, tileY) || gm.getCollision(tileX - 1, tileY + (int) Math.signum((int) offY))) {
+			if (GameManager.gm.getPlayer().getPosX() < this.posX) {
+				if (GameManager.gm.getCollision(tileX - 1, tileY) || GameManager.gm.getCollision(tileX - 1, tileY + (int) Math.signum((int) offY))) {
 					offX -= dt * speed;
 					if (offX < -padding) {
 						tileX += offX / GameManager.TS + 1;
@@ -176,12 +176,12 @@ public class MeleeEnemy extends GameObject {
 			// Beginning Jump and Gravity
 			fallDistance += dt * fallSpeed;
 
-			if (gm.getPlayer().getPosY() < this.posY - (GameManager.TS * 2) && ground && Math.abs(this.posX - gm.getPlayer().getPosX()) < 32) {
+			if (GameManager.gm.getPlayer().getPosY() < this.posY - (GameManager.TS * 2) && ground && Math.abs(this.posX - GameManager.gm.getPlayer().getPosX()) < 32) {
 				fallDistance += jump;
 				ground = false;
 			}
 
-			if (ground && (againstWall || gm.getCollisionNum((int) tileX, (int) tileY) == 3)) { // makes him jump if hes
+			if (ground && (againstWall || GameManager.gm.getCollisionNum((int) tileX, (int) tileY) == 3)) { // makes him jump if hes
 																								// in lava, to move
 																								// faster and escape
 				// if (ground && againstWall) {
@@ -189,7 +189,7 @@ public class MeleeEnemy extends GameObject {
 				ground = false;
 			}
 
-			if (gm.getPlayer().isSlow()) {
+			if (GameManager.gm.getPlayer().isSlow()) {
 				offY += fallDistance / slowMotion;
 			} else {
 				offY += fallDistance;
@@ -197,7 +197,7 @@ public class MeleeEnemy extends GameObject {
 			}
 
 			if (fallDistance < 0) {
-				if ((gm.getCollision(tileX, tileY - 1) || gm.getCollision(tileX + (int) Math.signum((int) Math.abs(offX) > padding ? offX : 0), tileY - 1)) && offY < -paddingTop) {
+				if ((GameManager.gm.getCollision(tileX, tileY - 1) || GameManager.gm.getCollision(tileX + (int) Math.signum((int) Math.abs(offX) > padding ? offX : 0), tileY - 1)) && offY < -paddingTop) {
 					fallDistance = 0;
 					offY = -paddingTop;
 				}
@@ -205,7 +205,7 @@ public class MeleeEnemy extends GameObject {
 
 			if (fallDistance > 0) {
 
-				if ((gm.getCollision(tileX, tileY + 1)  || gm.getCollisionNum(tileX, tileY + 1) == 4 ||  gm.getCollision(tileX + (int) Math.signum((int) Math.abs(offX) > padding ? offX : 0), tileY + 1)) && offY > 0) {
+				if ((GameManager.gm.getCollision(tileX, tileY + 1)  || GameManager.gm.getCollisionNum(tileX, tileY + 1) == 4 ||  GameManager.gm.getCollision(tileX + (int) Math.signum((int) Math.abs(offX) > padding ? offX : 0), tileY + 1)) && offY > 0) {
 					fallDistance = 0;
 					offY = 0;
 					ground = true;
@@ -272,8 +272,8 @@ public class MeleeEnemy extends GameObject {
 
 			groundLast = ground;
 			// attacking
-			if (checkContact(this.posX, this.posY, gm.getPlayer().getPosX(), gm.getPlayer().getPosY()) && (System.nanoTime() / 1000000000.0) - lastTimeDamage > damageCooldown) {
-				gm.getPlayer().hit(damage);
+			if (checkContact(this.posX, this.posY, GameManager.gm.getPlayer().getPosX(), GameManager.gm.getPlayer().getPosY()) && (System.nanoTime() / 1000000000.0) - lastTimeDamage > damageCooldown) {
+				GameManager.gm.getPlayer().hit(damage);
 				lastTimeDamage = System.nanoTime() / 1000000000.0;
 				attacking = true;
 			}
@@ -333,5 +333,16 @@ public class MeleeEnemy extends GameObject {
     public float getTileY() {
         return tileY;
     }
+
+	@Override
+	public void dispose() {
+		// TODO Auto-generated method stub
+		meleeEnemy.dispose();
+		meleeEnemy = null;
+		ugh.close();
+		ugh = null;
+		boof.close();
+		boof = null;
+	}
 	
 }

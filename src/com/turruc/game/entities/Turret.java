@@ -21,7 +21,7 @@ public class Turret extends GameObject {
 	private int slowFireRate = normalFireRate * slowMotion;
 	private int fireRate = 70; // Smaller = faster firerate //70
 	private int timeUntilNextShot = fireRate;
-	private GameManager gm;
+//	private GameManager gm;
 	private double angle = 0;
 	private double angle2;
 	private double targetAngle;
@@ -40,7 +40,7 @@ public class Turret extends GameObject {
 	private SoundClip pew;
 	private SoundClip boof;
 	
-	public Turret(GameManager gm, int posX, int posY) {
+	public Turret(int posX, int posY) {
 		Random random = new Random();
 		normalFireRate += random.nextInt(20) - 10;
 		this.tag = EntityType.turret;
@@ -52,17 +52,16 @@ public class Turret extends GameObject {
 		this.posY = posY * GameManager.TS;
 		this.width = 32;
 		this.height = 32;
-		this.gm = gm;
-		this.player = gm.getPlayer();
+		this.player = GameManager.gm.getPlayer();
 		
 		pew = new SoundClip("/audio/pew.wav");
 		boof = new SoundClip("/audio/boof.wav");
 	}
 
 	@Override
-	public void update(GameContainer gc, GameManager gm, float dt) {
+	public void update(GameContainer gc, float dt) {
 
-		if (gm.getPlayer().isSlow()) {
+		if (GameManager.gm.getPlayer().isSlow()) {
 			fireRate = slowFireRate;
 			turnSpeed = slowTurnSpeed;
 		} else {
@@ -70,16 +69,16 @@ public class Turret extends GameObject {
 			turnSpeed = normalTurnSpeed;
 		}
 
-		targetX = gm.getPlayer().getPosX();
-		targetY = gm.getPlayer().getPosY();
+		targetX = GameManager.gm.getPlayer().getPosX();
+		targetY = GameManager.gm.getPlayer().getPosY();
 
-		if (gm.getCollisionNum(tileX, tileY + 1) == 1) { // below
+		if (GameManager.gm.getCollisionNum(tileX, tileY + 1) == 1) { // below
 			angle2 = 0;
-		} else if (gm.getCollisionNum(tileX + 1, tileY) == 1) { // right
+		} else if (GameManager.gm.getCollisionNum(tileX + 1, tileY) == 1) { // right
 			angle2 = 270;
-		} else if (gm.getCollisionNum(tileX - 1, tileY) == 1) { // left
+		} else if (GameManager.gm.getCollisionNum(tileX - 1, tileY) == 1) { // left
 			angle2 = 90;
-		} else if (gm.getCollisionNum(tileX, tileY - 1) == 1) { // above
+		} else if (GameManager.gm.getCollisionNum(tileX, tileY - 1) == 1) { // above
 			angle2 = 180;
 		}
 
@@ -120,14 +119,14 @@ public class Turret extends GameObject {
 		if (timeUntilNextShot == 0 && canShoot) {
 			if (checkLOS(this.posX, this.posY, targetX, targetY)) {
 				timeUntilNextShot = fireRate;
-				gm.addObject(new EnemyBullet((int) (targetX), (int) (targetY), tileX, tileY, offX, offY));
+				GameManager.gm.addObject(new EnemyBullet((int) (targetX), (int) (targetY), tileX, tileY, offX, offY));
 				pew.play();
 			}
 		}
 	}
 
 	public boolean checkLOS(float x0, float y0, float x1, float y1) {
-		LOSBullet check = new LOSBullet((int) targetX, (int) targetY, tileX, tileY, offX, offY, GameManager.getGc(), gm, GameManager.getGc().getDt(), range, true, false);
+		LOSBullet check = new LOSBullet((int) targetX, (int) targetY, tileX, tileY, offX, offY, GameManager.getGc(), GameManager.getGc().getDt(), range, true, false);
 		return check.LOS;
 	}
 
@@ -138,7 +137,7 @@ public class Turret extends GameObject {
 	}
 
 	public void setDead(boolean dead) {
-		gm.getCollision()[(((int) this.tileY) * gm.getLevelW()) + (int) this.tileX] = 0;
+		GameManager.gm.getCollision()[(((int) this.tileY) * GameManager.gm.getLevelW()) + (int) this.tileX] = 0;
 		this.dead = dead;
 		player.setMana(player.getMana() + manaReward);
 		boof.play();
@@ -151,5 +150,14 @@ public class Turret extends GameObject {
     public float getTileY() {
         return tileY;
     }
+
+	@Override
+	public void dispose() {
+		// TODO Auto-generated method stub
+		turret.dispose();
+		turret = null;
+		turretHead.dispose();
+		turretHead = null;
+	}
 	
 }

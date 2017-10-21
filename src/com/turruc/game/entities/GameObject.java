@@ -11,7 +11,7 @@ public abstract class GameObject {
 	protected boolean dead = false;
 	public static int slowMotion = 8;
 	
-	public abstract void update(GameContainer gc, GameManager gm, float dt);
+	public abstract void update(GameContainer gc, float dt);
 
 	public abstract void render(GameContainer gc, Renderer r);
 
@@ -69,4 +69,6 @@ public abstract class GameObject {
 	public void setDead(boolean dead) {
 		this.dead = dead;
 	}
+	
+	public abstract void dispose();
 }

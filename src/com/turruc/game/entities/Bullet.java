@@ -34,10 +34,9 @@ public class Bullet extends GameObject {
 		angle2 = Math.atan2(mouseY - posY, mouseX - posX);
 	}
 
-	@Override
-	public void update(GameContainer gc, GameManager gm, float dt) {
+	public void update(GameContainer gc, float dt) {
 
-		if (gm.getPlayer().isSlow()) {
+		if (GameManager.gm.getPlayer().isSlow()) {
 			speed = slowSpeed;
 		} else {
 			speed = normalSpeed;
@@ -70,12 +69,12 @@ public class Bullet extends GameObject {
 			offX += GameManager.TS;
 		}
 
-		if (gm.getCollision(tileX, tileY)) {
+		if (GameManager.gm.getCollision(tileX, tileY)) {
 			this.dead = true;
 		}
 
 
-		// if (gm.getCollisionNum(tileX, tileY) == 2) {
+		// if (GameManager.gm.getCollisionNum(tileX, tileY) == 2) {
 		for (int i = 0; i < GameManager.getObjects().size(); i++) {
 			if (GameManager.getObjects().get(i).getTag().equals(EntityType.turret) || GameManager.getObjects().get(i).getTag().equals(EntityType.meleeEnemy)) {
 				if (checkContact(this.posX, this.posY, GameManager.getObjects().get(i).getPosX(), GameManager.getObjects().get(i).getPosY())) {
@@ -83,11 +82,11 @@ public class Bullet extends GameObject {
 					if (GameManager.getObjects().get(i).getTag().equals(EntityType.meleeEnemy)) ((MeleeEnemy) GameManager.getObjects().get(i)).hit(damage); //damage meleeEnemy
 					this.dead = true;
 					break;
-					// i = gm.getObjects().size();
+					// i = GameManager.gm.getObjects().size();
 				}
 				}
 		}
-			if (gm.getCollisionNum(tileX, tileY) == 2) {
+			if (GameManager.gm.getCollisionNum(tileX, tileY) == 2) {
 				for (int i = 0; i < GameManager.getObjects().size(); i++) {
 					if (GameManager.getObjects().get(i).getTag().equals(EntityType.turret)) {
 						if (Math.abs(posX - GameManager.getObjects().get(i).getPosX()) <= 32 && Math.abs(posY - GameManager.getObjects().get(i).getPosY()) <= 32) {
@@ -109,5 +108,9 @@ public class Bullet extends GameObject {
 	public void render(GameContainer gc, Renderer r) {
 		r.drawImage(r.transformImage(bullet.getBufferedImage(), (int) Math.toDegrees(angle2)), (int) posX, (int) posY);
 	}
-
+	
+	public void dispose() {
+		bullet.dispose();
+		bullet = null;
+	}
 }

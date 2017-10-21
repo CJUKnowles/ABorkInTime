@@ -14,8 +14,8 @@ public class LOSBullet extends GameObject {
 	private float lastClearPosX = 0;
 	private float lastClearPosY = 0;
 
-	
-	public LOSBullet(int targetX, int targetY, int tileX, int tileY, float offX, float offY, GameContainer gc, GameManager gm, float dt, int range, boolean kill, boolean ignoreWalls) {
+
+	public LOSBullet(int targetX, int targetY, int tileX, int tileY, float offX, float offY, GameContainer gc, float dt, int range, boolean kill, boolean ignoreWalls) {
 		this.tag = EntityType.LOSBullet;
 		posX = tileX * GameManager.TS + offX;
 		posY = tileY * GameManager.TS + offY;
@@ -56,7 +56,7 @@ public class LOSBullet extends GameObject {
 				}
 			} else {
 			
-			if (gm.getCollisionNum(tileX, tileY) == 1 || range == 0) {
+			if (GameManager.gm.getCollisionNum(tileX, tileY) == 1 || range == 0) {
 				if(kill) {
 					this.dead = true;					
 				}
@@ -64,7 +64,7 @@ public class LOSBullet extends GameObject {
 				return;
 			}
 			}
-			if (gm.getCollisionNum(tileX, tileY) == 0 && !kill) {
+			if (GameManager.gm.getCollisionNum(tileX, tileY) == 0 && !kill) {
 				System.out.println("I am the biggest meme");
 				this.lastClearPosX = this.posX;
 				this.lastClearPosY = this.posY;
@@ -87,7 +87,7 @@ public class LOSBullet extends GameObject {
 	}
 
 	@Override
-	public void update(GameContainer gc, GameManager gm, float dt) {
+	public void update(GameContainer gc, float dt) {
 	}
 
 	@Override
@@ -101,6 +101,10 @@ public class LOSBullet extends GameObject {
 
 	public float getLastClearPosY() {
 		return lastClearPosY;
+	}
+
+	public void dispose() {
+		
 	}
 
 }
