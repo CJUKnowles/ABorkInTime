@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.io.File;
 import java.util.ArrayList;
 
+import com.sun.glass.events.KeyEvent;
 import com.turruc.engine.AbstractGame;
 import com.turruc.engine.GameContainer;
 import com.turruc.engine.Renderer;
@@ -42,16 +43,17 @@ public class GameManager extends AbstractGame {
 	private int slowAnimationSpeed = normalAnimationSpeed / GameObject.slowMotion;
 	private int animationSpeed = normalAnimationSpeed;
 
+	public static boolean IN_LEVEL_EDITOR = false;
 	private float anim = 0;
 
 	public GameManager() {
 		player = new Player(8, 8);
 		getObjects().add(player);
-		level = new Image("/level2.png");
-		loadLevel("/level2.png");
+		level = new Image("/level.png");
+		loadLevel("/level.png");
 		camera = new Camera(EntityType.player);
 		dirt = new ImageTile("/dirtTileset.png", 32, 32);
-		background = new Image("/background2.png");
+		background = new Image("/background.png");
 		midground = new Image("/midground.png");
 		platform = new Image("/platform.png");
 		lava = new ImageTile("/lava.png", 32, 32);
@@ -59,6 +61,13 @@ public class GameManager extends AbstractGame {
 	}
 
 	public static void main(String[] args) {
+		if(args.length == 1) {
+			IN_LEVEL_EDITOR = args[0].equalsIgnoreCase("true");
+		}else {
+			IN_LEVEL_EDITOR = false;
+		}
+		
+		System.out.println(IN_LEVEL_EDITOR);
 		gc = new GameContainer(new GameManager());
 		gc.start();
 	}
@@ -68,8 +77,14 @@ public class GameManager extends AbstractGame {
 		gc.getRenderer().setAmbientColor(-1);
 	}
 
+	
 	@Override
 	public void update(GameContainer gc, float dt) {
+		
+		if(IN_LEVEL_EDITOR && gc.getInput().isKeyDown(KeyEvent.VK_F5)) {
+			updateLevel("/level.png");
+		}
+		
 		for (int i = 0; i < getObjects().size(); i++) {
 			getObjects().get(i).update(gc, this, dt);
 			if (getObjects().get(i).isDead()) {
@@ -212,6 +227,40 @@ public class GameManager extends AbstractGame {
 
 	}
 
+	public void updateLevel(String path) {
+			Image levelImage = new Image(path);
+
+			levelW = levelImage.getW();
+			levelH = levelImage.getH();
+			collision = new int[levelW * levelH];
+
+			for (int y = 0; y < levelImage.getH(); y++) {
+				for (int x = 0; x < levelImage.getW(); x++) {
+
+					if (levelImage.getP()[x + y * levelImage.getW()] == 0xffff00ff) {
+						collision[x + y * levelImage.getW()] = -100;// player
+					} else if (levelImage.getP()[x + y * levelImage.getW()] == Color.BLACK.getRGB()) {// black
+						collision[x + y * levelImage.getW()] = 1; // collision block
+					} else if (levelImage.getP()[x + y * levelImage.getW()] == Color.WHITE.getRGB()) {// white
+						collision[x + y * levelImage.getW()] = 0;// air
+					} else if (levelImage.getP()[x + y * levelImage.getW()] == Color.GREEN.getRGB()) {// green
+						collision[x + y * levelImage.getW()] = 2;// turret
+					} else if ((levelImage.getP()[x + y * levelImage.getW()] | 0xff000000) == Color.RED.getRGB()) {// red // | 0xff000000 removes alpha
+						collision[x + y * levelImage.getW()] = -1;// health ball 
+					} else if (levelImage.getP()[x + y * levelImage.getW()] == Color.BLUE.getRGB()) {// blue
+						collision[x + y * levelImage.getW()] = -2;// mana ball
+					} else if (levelImage.getP()[x + y * levelImage.getW()] == Color.YELLOW.getRGB()) {// yellow
+						collision[x + y * levelImage.getW()] = 3;// lava
+					} else if (levelImage.getP()[x + y * levelImage.getW()] == 0xff963200) {// Brown
+						collision[x + y * levelImage.getW()] = 4;// platform
+					} else if (levelImage.getP()[x + y * levelImage.getW()] == 0xff6400ff) {// Purple
+						collision[x + y * levelImage.getW()] = 5;// ladder
+					} else if (levelImage.getP()[x + y * levelImage.getW()] == 0xff00ffff) {// teal
+						//getObjects().add(new MeleeEnemy(this, x, y)); //meleeEnemy
+					}
+				}
+			}
+	}
 	public void loadLevel(String path) {
 		Image levelImage = new Image(path);
 
