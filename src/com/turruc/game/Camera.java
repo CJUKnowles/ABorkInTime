@@ -41,7 +41,7 @@ public class Camera {
 		float targetY = (target.getPosY() + target.getHeight() / 2) - gc.getHeight() / 2;
 		
 		//offX += scrollSpeed;
-		offY -= dt * (offY - targetY) * camSpeed;
+		offY -= dt * (offY - targetY) * (camSpeed/2);
 
 		if (offX < 0) {
 			offX = 0;

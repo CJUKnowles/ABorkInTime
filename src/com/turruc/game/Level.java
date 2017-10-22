@@ -64,7 +64,7 @@ public class Level {
 			}
 		}
 	}
-	public void loadLevel(GameManager gm) {
+	public void loadLevel() {
 		GameManager.gm.levelW = levelImage.getW();
 		GameManager.gm.levelH = levelImage.getH();
 		GameManager.gm.collision = new int[GameManager.gm.levelW * GameManager.gm.levelH];
@@ -125,11 +125,11 @@ public class Level {
 				}
 
 				if (GameManager.gm.collision[x + y * GameManager.gm.levelW] == -1) { // healthBall
-					GameManager.getObjects().add(new ResourceBall(gm, x, y, 0, 101 + (levelImage.getP()[x + y * GameManager.gm.levelW] >> 24)));
+					GameManager.getObjects().add(new ResourceBall(GameManager.gm, x, y, 0, 101 + (levelImage.getP()[x + y * GameManager.gm.levelW] >> 24)));
 				}
 
 				if (GameManager.gm.collision[x + y * GameManager.gm.levelW] == -2) { // manaBall
-					GameManager.getObjects().add(new ResourceBall(gm, x, y, 1, 101 + (levelImage.getP()[x + y * GameManager.gm.levelW] >> 24)));
+					GameManager.getObjects().add(new ResourceBall(GameManager.gm, x, y, 1, 101 + (levelImage.getP()[x + y * GameManager.gm.levelW] >> 24)));
 				}
 
 			}

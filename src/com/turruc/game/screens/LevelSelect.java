@@ -64,7 +64,7 @@ public class LevelSelect extends AbstractGame {
 				click.play();
 				// TODO: Set the selected level as the new level
 				if(levelToLoad!=null) {
-					levelToLoad.loadLevel(GameManager.gm);
+					levelToLoad.loadLevel();
 					GameManager.gm.level = levelToLoad;
 					gc.gameState = GameState.GAME;					
 				}
