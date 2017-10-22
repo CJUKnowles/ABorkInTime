@@ -155,7 +155,7 @@ public class MeleeEnemy extends GameObject {
 					offX += dt * speed;
 					againstWall = false;
 				}
-			}
+			} 
 
 			if (GameManager.gm.getPlayer().getPosX() < this.posX && Math.abs(GameManager.gm.getPlayer().getPosX() - this.posX) > GameManager.TS / 2) {
 				if (GameManager.gm.getCollision(tileX - 1, tileY) || GameManager.gm.getCollision(tileX - 1, tileY + (int) Math.signum((int) offY))) {
@@ -170,6 +170,9 @@ public class MeleeEnemy extends GameObject {
 					offX -= dt * speed;
 					againstWall = false;
 				}
+			} 
+			if(Math.abs(GameManager.gm.getPlayer().getPosX() - this.posX) < GameManager.TS / 2) {
+				againstWall = false;
 			}
 			// End left and right
 
