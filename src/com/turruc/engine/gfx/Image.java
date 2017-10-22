@@ -21,6 +21,10 @@ public class Image {
 			image = ImageIO.read(Image.class.getResourceAsStream(path));
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch(IllegalArgumentException e1) {
+			System.err.println("Could not find file: " + path);
+			e1.printStackTrace();
+			return;
 		}
 
 		w = image.getWidth();
