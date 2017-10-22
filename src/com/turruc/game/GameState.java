@@ -5,5 +5,6 @@ public enum GameState {
 	GAME,
 	LEVELS,
 	GAMEOVER,
-	VICTORY;
+	VICTORY,
+	LEVELEDITOR;
 }

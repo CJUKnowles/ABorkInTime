@@ -12,6 +12,7 @@ import com.turruc.engine.gfx.ImageTile;
 import com.turruc.game.entities.EntityType;
 import com.turruc.game.entities.GameObject;
 import com.turruc.game.entities.Player;
+import com.turruc.game.screens.Menu;
 
 public class GameManager extends AbstractGame {
 	private static GameContainer gc;
@@ -79,7 +80,7 @@ public class GameManager extends AbstractGame {
 		if (IN_LEVEL_EDITOR && gc.getInput().isKeyDown(KeyEvent.VK_F5)) {
 			level.updateLevel(this);
 		}
-
+		
 		for (int i = 0; i < getObjects().size(); i++) {
 			getObjects().get(i).update(gc, dt);
 			if (getObjects().get(i).isDead()) {
