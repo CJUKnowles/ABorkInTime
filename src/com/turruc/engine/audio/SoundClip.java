@@ -65,6 +65,7 @@ public class SoundClip {//test
 	}
 
 	public void setVolume(float value) {
+		if(gainControl != null)
 		gainControl.setValue(value);
 	}
 
