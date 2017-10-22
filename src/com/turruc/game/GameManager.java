@@ -25,8 +25,6 @@ public class GameManager extends AbstractGame {
 
 	public int[] collision;
 	public int levelW, levelH;
-
-	private ImageTile dirt;
 	private Image platform;
 	private Image ladder;
 	private ImageTile lava;
@@ -49,10 +47,9 @@ public class GameManager extends AbstractGame {
 		}
 		player = new Player(8, 8);
 		getObjects().add(player);
-		level = new Level(new Image("/levels/levelExample/levelExample.png"), new Image("/levels/levelExample/backgroundExample.png"), new Image("/levels/levelExample/midgroundExample.png"), "dirt");
+		level = new Level(new Image("/levels/levelExample/levelExample.png"), new Image("/levels/levelExample/backgroundExample.png"), new Image("/levels/levelExample/midgroundExample.png"), new ImageTile("/levels/levelExample/tilesetExample.png", 32, 32));
 		level.loadLevel();
 		camera = new Camera(EntityType.player);
-		dirt = new ImageTile("/dirtTileset.png", 32, 32);
 		platform = new Image("/platform.png");
 		lava = new ImageTile("/lava.png", 32, 32);
 		ladder = new Image("/ladder.png");
@@ -126,60 +123,60 @@ public class GameManager extends AbstractGame {
 					if (y != 0 && y != levelH - 1 && x != 0 && x != levelW) {
 						if (!getContact(x, y - 1) && getContact(x - 1, y) && getCollision(x, y + 1) && getContact(x + 1, y)) {
 							// dirt.getTileImage(0, 0).setLightBlock(Light.FULL);
-							r.drawImageTile(dirt, x * TS, y * TS, 0, 0); // up
+							r.drawImageTile(level.getTileset(), x * TS, y * TS, 0, 0); // up
 						} else if (getContact(x, y - 1) && !getContact(x - 1, y) && getCollision(x, y + 1) && getContact(x + 1, y)) {
-							r.drawImageTile(dirt, x * TS, y * TS, 1, 0); // left
+							r.drawImageTile(level.getTileset(), x * TS, y * TS, 1, 0); // left
 						} else if (getContact(x, y - 1) && getContact(x - 1, y) && !getCollision(x, y + 1) && getContact(x + 1, y)) {
-							r.drawImageTile(dirt, x * TS, y * TS, 2, 0); // down
+							r.drawImageTile(level.getTileset(), x * TS, y * TS, 2, 0); // down
 						} else if (getContact(x, y - 1) && getContact(x - 1, y) && getCollision(x, y + 1) && !getContact(x + 1, y)) {
-							r.drawImageTile(dirt, x * TS, y * TS, 3, 0); // right
+							r.drawImageTile(level.getTileset(), x * TS, y * TS, 3, 0); // right
 						} else if (!getContact(x, y - 1) && !getContact(x - 1, y) && getCollision(x, y + 1) && getContact(x + 1, y)) {
-							r.drawImageTile(dirt, x * TS, y * TS, 0, 1); // up, left
+							r.drawImageTile(level.getTileset(), x * TS, y * TS, 0, 1); // up, left
 						} else if (!getContact(x, y - 1) && getContact(x - 1, y) && getCollision(x, y + 1) && !getContact(x + 1, y)) {
-							r.drawImageTile(dirt, x * TS, y * TS, 1, 1); // up, right
+							r.drawImageTile(level.getTileset(), x * TS, y * TS, 1, 1); // up, right
 						} else if (getContact(x, y - 1) && getContact(x - 1, y) && !getCollision(x, y + 1) && !getContact(x + 1, y)) {
-							r.drawImageTile(dirt, x * TS, y * TS, 2, 1); // down, right
+							r.drawImageTile(level.getTileset(), x * TS, y * TS, 2, 1); // down, right
 						} else if (getContact(x, y - 1) && !getContact(x - 1, y) && !getCollision(x, y + 1) && getContact(x + 1, y)) {
-							r.drawImageTile(dirt, x * TS, y * TS, 3, 1); // down, left
+							r.drawImageTile(level.getTileset(), x * TS, y * TS, 3, 1); // down, left
 						} else if (!getContact(x, y - 1) && getContact(x - 1, y) && !getCollision(x, y + 1) && getContact(x + 1, y)) {
-							r.drawImageTile(dirt, x * TS, y * TS, 0, 2); // up, down
+							r.drawImageTile(level.getTileset(), x * TS, y * TS, 0, 2); // up, down
 						} else if (getContact(x, y - 1) && !getContact(x - 1, y) && getCollision(x, y + 1) && !getContact(x + 1, y)) {
-							r.drawImageTile(dirt, x * TS, y * TS, 1, 2); // left, right
+							r.drawImageTile(level.getTileset(), x * TS, y * TS, 1, 2); // left, right
 						} else if (!getContact(x, y - 1) && !getContact(x - 1, y) && getCollision(x, y + 1) && !getContact(x + 1, y)) {
-							r.drawImageTile(dirt, x * TS, y * TS, 2, 2); // up, left, right
+							r.drawImageTile(level.getTileset(), x * TS, y * TS, 2, 2); // up, left, right
 						} else if (!getContact(x, y - 1) && getContact(x - 1, y) && !getCollision(x, y + 1) && !getContact(x + 1, y)) {
-							r.drawImageTile(dirt, x * TS, y * TS, 3, 2); // up, down, right
+							r.drawImageTile(level.getTileset(), x * TS, y * TS, 3, 2); // up, down, right
 						} else if (getContact(x, y - 1) && !getContact(x - 1, y) && !getCollision(x, y + 1) && !getContact(x + 1, y)) {
-							r.drawImageTile(dirt, x * TS, y * TS, 0, 3); // left, right, down
+							r.drawImageTile(level.getTileset(), x * TS, y * TS, 0, 3); // left, right, down
 						} else if (!getContact(x, y - 1) && !getContact(x - 1, y) && !getCollision(x, y + 1) && getContact(x + 1, y)) {
-							r.drawImageTile(dirt, x * TS, y * TS, 1, 3); // up, left, down
+							r.drawImageTile(level.getTileset(), x * TS, y * TS, 1, 3); // up, left, down
 						} else if (!getContact(x, y - 1) && !getContact(x - 1, y) && !getCollision(x, y + 1) && !getContact(x + 1, y)) {
-							r.drawImageTile(dirt, x * TS, y * TS, 2, 3); // up, left, down, right
+							r.drawImageTile(level.getTileset(), x * TS, y * TS, 2, 3); // up, left, down, right
 						} else if (getContact(x, y - 1) && getContact(x - 1, y) && getCollision(x, y + 1) && getContact(x + 1, y)) {
-							r.drawImageTile(dirt, x * TS, y * TS, 3, 3); // none
+							r.drawImageTile(level.getTileset(), x * TS, y * TS, 3, 3); // none
 						}
 
 						// top row
 					} else if (y == 0) {
 						if (!getCollision(x, y + 1)) {
-							r.drawImageTile(dirt, x * TS, y * TS, 2, 0); // down
+							r.drawImageTile(level.getTileset(), x * TS, y * TS, 2, 0); // down
 						} else {
-							r.drawImageTile(dirt, x * TS, y * TS, 3, 3); // none
+							r.drawImageTile(level.getTileset(), x * TS, y * TS, 3, 3); // none
 						}
 
 						// left column
 					} else if (x == 0) {
 						if (!getContact(x + 1, y)) {
-							r.drawImageTile(dirt, x * TS, y * TS, 3, 0); // right
+							r.drawImageTile(level.getTileset(), x * TS, y * TS, 3, 0); // right
 						} else {
-							r.drawImageTile(dirt, x * TS, y * TS, 3, 3); // none
+							r.drawImageTile(level.getTileset(), x * TS, y * TS, 3, 3); // none
 						}
 						// bottom row
 					} else if (y == levelH - 1) {
 						if (!getContact(x, y - 1)) {
-							r.drawImageTile(dirt, x * TS, y * TS, 0, 0); // up
+							r.drawImageTile(level.getTileset(), x * TS, y * TS, 0, 0); // up
 						} else {
-							r.drawImageTile(dirt, x * TS, y * TS, 3, 3); // none
+							r.drawImageTile(level.getTileset(), x * TS, y * TS, 3, 3); // none
 						}
 					}
 				}

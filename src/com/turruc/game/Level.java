@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 import com.turruc.engine.gfx.Image;
+import com.turruc.engine.gfx.ImageTile;
 import com.turruc.game.entities.GameObject;
-import com.turruc.game.entities.LargeEnemy;
 import com.turruc.game.entities.MeleeEnemy;
 import com.turruc.game.entities.Player;
 import com.turruc.game.entities.ResourceBall;
@@ -14,20 +14,20 @@ import com.turruc.game.entities.Turret;
 public class Level {
 	Image levelImage, background, midground;
 	Image preview;
-	String levelType;
+	ImageTile tileset;
 
-	public Level(Image levelImage, Image background, Image midground, String levelType) {
+	public Level(Image levelImage, Image background, Image midground, ImageTile tileset) {
 		this.levelImage = levelImage;
 		this.background = background;
 		this.midground = midground;
-		this.levelType = levelType;
+		this.tileset = tileset;
 	}
 
-	public Level(Image levelImage, Image background, Image midground, String levelType, Image preview) {
+	public Level(Image levelImage, Image background, Image midground, ImageTile tileset, Image preview) {
 		this.levelImage = levelImage;
 		this.background = background;
 		this.midground = midground;
-		this.levelType = levelType;
+		this.tileset = tileset;
 		this.preview = preview;
 	}
 
@@ -62,7 +62,7 @@ public class Level {
 				} else if (levelImage.getP()[x + y * levelImage.getW()] == 0xff6400ff) {// Purple
 					GameManager.gm.collision[x + y * levelImage.getW()] = 5;// ladder
 				} else if (levelImage.getP()[x + y * levelImage.getW()] == 0xff00ffff) {// teal
-					//getObjects().add(new MeleeEnemy(this, x, y)); //meleeEnemy
+					GameManager.getObjects().add(new MeleeEnemy(x, y)); //meleeEnemy
 				}
 			}
 		}
@@ -113,7 +113,7 @@ public class Level {
 					GameManager.gm.collision[x + y * levelImage.getW()] = 5;// ladder
 				} else if (levelImage.getP()[x + y * levelImage.getW()] == 0xff00ffff) {// teal
 					//GameManager.getObjects().add(new MeleeEnemy(x, y)); //meleeEnemy
-					GameManager.getObjects().add(new LargeEnemy(x, y)); //meleeEnemy
+					GameManager.getObjects().add(new MeleeEnemy(x, y)); //meleeEnemy
 
 				}
 			}
@@ -175,11 +175,11 @@ public class Level {
 		this.preview = preview;
 	}
 
-	public String getLevelType() {
-		return levelType;
+	public ImageTile getTileset() {
+		return tileset;
 	}
 
-	public void setLevelType(String levelType) {
-		this.levelType = levelType;
+	public void setTileset(ImageTile tileset) {
+		this.tileset = tileset;
 	}
 }

@@ -19,7 +19,7 @@ public class ResourceBall extends GameObject {
 
 	private int tileX;
 	private int tileY;
-	private static SoundClip woosh;
+	private SoundClip woosh;
 
 	public ResourceBall(GameManager gm, int tileX, int tileY, int type, int amount) {
 		this.tileX = tileX;

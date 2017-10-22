@@ -8,6 +8,7 @@ import com.turruc.engine.Renderer;
 import com.turruc.engine.audio.SoundClip;
 import com.turruc.engine.gfx.Button;
 import com.turruc.engine.gfx.Image;
+import com.turruc.engine.gfx.ImageTile;
 import com.turruc.game.GameManager;
 import com.turruc.game.GameState;
 import com.turruc.game.Level;
@@ -46,7 +47,7 @@ public class LevelSelect extends AbstractGame {
 
 			boolean correct = checkFiles(path);
 			if(correct) {
-				levels[i - 1] = new Level(new Image(path + "/levelImage.png"), new Image(path + "/background.png"), new Image(path + "/midground.png"), "dirt", new Image(path + "/levelPreview.png"));
+				levels[i - 1] = new Level(new Image(path + "/levelImage.png"), new Image(path + "/background.png"), new Image(path + "/midground.png"), new ImageTile(path + "/tileset.png", 32, 32), new Image(path + "/levelPreview.png"));
 			}
 
 		}

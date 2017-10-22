@@ -22,7 +22,7 @@ public class Button extends Rectangle {
 	
 	public void drawButton(Renderer r) {
 		r.drawFillRect((int)this.getX(), (int)this.getY(), (int)this.getWidth(), (int)this.getHeight(), color);
-		r.drawText(text, this.x + (this.width/2) - r.getTextLength(text)/2, this.y + this.height/2 - 5, color);
+		r.drawText(text, this.x + (this.width/2) - r.getTextLength(text)/2, this.y + this.height/2 - 5, 0xffffffff);
 	}
 	
 	public void drawOutline(Renderer r) {

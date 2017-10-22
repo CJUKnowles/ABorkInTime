@@ -66,11 +66,11 @@ public class Player extends GameObject {
 	private boolean attacking = false;
 	private float attackAnim = 4;
 
-	private static SoundClip ow;
-	private static SoundClip pew;
-	private static SoundClip woosh;
-	private static SoundClip boof;
-	private static SoundClip vshh;
+	private SoundClip ow;
+	private SoundClip pew;
+	private SoundClip woosh;
+	private SoundClip boof;
+	private SoundClip vshh;
 
 	public Player(int posX, int posY) {
 		this.tag = EntityType.player;

@@ -21,7 +21,6 @@ public class Turret extends GameObject {
 	private int slowFireRate = normalFireRate * slowMotion;
 	private int fireRate = 70; // Smaller = faster firerate //70
 	private int timeUntilNextShot = fireRate;
-//	private GameManager gm;
 	private double angle = 0;
 	private double angle2;
 	private double targetAngle;
@@ -37,8 +36,8 @@ public class Turret extends GameObject {
 
 	private int manaReward = 20;
 	
-	private static SoundClip pew;
-	private static SoundClip boof;
+	private SoundClip pew;
+	private SoundClip boof;
 	
 	public Turret(int posX, int posY) {
 		Random random = new Random();

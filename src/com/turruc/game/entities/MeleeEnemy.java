@@ -47,8 +47,8 @@ public class MeleeEnemy extends GameObject {
 	private boolean attacking = false;
 	private float attackAnim = 4;
 
-	private static SoundClip ugh;
-	private static SoundClip boof;
+	private SoundClip ugh;
+	private SoundClip boof;
 
 	private Player player;
 
@@ -71,10 +71,8 @@ public class MeleeEnemy extends GameObject {
 
 		player = GameManager.gm.getPlayer();
 
-		if(ugh == null)
-		ugh = new SoundClip("/audio/ugh.wav");
-		if(boof == null)
-		boof = new SoundClip("/audio/boof.wav");
+		if (ugh == null) ugh = new SoundClip("/audio/ugh.wav");
+		if (boof == null) boof = new SoundClip("/audio/boof.wav");
 	}
 
 	@Override
@@ -145,7 +143,7 @@ public class MeleeEnemy extends GameObject {
 			}
 
 			// Beginning Left and right
-			if (GameManager.gm.getPlayer().getPosX() > this.posX) {
+			if (GameManager.gm.getPlayer().getPosX() > this.posX && Math.abs(GameManager.gm.getPlayer().getPosX() - this.posX) > GameManager.TS / 2) {
 				if (GameManager.gm.getCollision(tileX + 1, tileY) || GameManager.gm.getCollision(tileX + 1, tileY + (int) Math.signum((int) offY))) {
 					offX += dt * speed;
 					if (offX > padding) {
@@ -159,7 +157,7 @@ public class MeleeEnemy extends GameObject {
 				}
 			}
 
-			if (GameManager.gm.getPlayer().getPosX() < this.posX) {
+			if (GameManager.gm.getPlayer().getPosX() < this.posX && Math.abs(GameManager.gm.getPlayer().getPosX() - this.posX) > GameManager.TS / 2) {
 				if (GameManager.gm.getCollision(tileX - 1, tileY) || GameManager.gm.getCollision(tileX - 1, tileY + (int) Math.signum((int) offY))) {
 					offX -= dt * speed;
 					if (offX < -padding) {
@@ -183,9 +181,11 @@ public class MeleeEnemy extends GameObject {
 				ground = false;
 			}
 
-			if (ground && (againstWall || GameManager.gm.getCollisionNum((int) tileX, (int) tileY) == 3)) { // makes him jump if hes
-																								// in lava, to move
-																								// faster and escape
+			if (ground && (againstWall || GameManager.gm.getCollisionNum((int) tileX, (int) tileY) == 3)) { // makes him
+																											// jump if
+																											// hes
+				// in lava, to move
+				// faster and escape
 				// if (ground && againstWall) {
 				fallDistance += jump;
 				ground = false;
@@ -207,16 +207,16 @@ public class MeleeEnemy extends GameObject {
 
 			if (fallDistance > 0) {
 
-				if ((GameManager.gm.getCollision(tileX, tileY + 1)  || GameManager.gm.getCollisionNum(tileX, tileY + 1) == 4 ||  GameManager.gm.getCollision(tileX + (int) Math.signum((int) Math.abs(offX) > padding ? offX : 0), tileY + 1)) && offY > 0) {
+				if ((GameManager.gm.getCollision(tileX, tileY + 1) || GameManager.gm.getCollisionNum(tileX, tileY + 1) == 4 || GameManager.gm.getCollision(tileX + (int) Math.signum((int) Math.abs(offX) > padding ? offX : 0), tileY + 1)) && offY > 0) {
 					fallDistance = 0;
 					offY = 0;
 					ground = true;
 				}
 			}
-			
-			//Falling through platforms
 
-			//End of falling through platforms
+			// Falling through platforms
+
+			// End of falling through platforms
 			// End Jump and Gravity
 
 			// Final Position
@@ -329,12 +329,12 @@ public class MeleeEnemy extends GameObject {
 	}
 
 	public float getTileX() {
-        return tileX;
-    }
+		return tileX;
+	}
 
-    public float getTileY() {
-        return tileY;
-    }
+	public float getTileY() {
+		return tileY;
+	}
 
 	@Override
 	public void dispose() {
@@ -346,5 +346,5 @@ public class MeleeEnemy extends GameObject {
 		boof.close();
 		boof = null;
 	}
-	
+
 }
