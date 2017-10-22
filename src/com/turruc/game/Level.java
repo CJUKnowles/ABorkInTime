@@ -41,7 +41,9 @@ public class Level {
 		for (int y = 0; y < levelImage.getH(); y++) {
 			for (int x = 0; x < levelImage.getW(); x++) {
 
-				if (levelImage.getP()[x + y * levelImage.getW()] == 0xffff00ff) {
+				if(y == 0 || y == levelImage.getH()-1 || x == 0 || x == levelImage.getW()-1) {
+					GameManager.gm.collision[x + y * levelImage.getW()] = 1;
+				}else if (levelImage.getP()[x + y * levelImage.getW()] == 0xffff00ff) {
 					GameManager.gm.collision[x + y * levelImage.getW()] = -100;// player
 				} else if (levelImage.getP()[x + y * levelImage.getW()] == Color.BLACK.getRGB()) {// black
 					GameManager.gm.collision[x + y * levelImage.getW()] = 1; // collision block
@@ -89,7 +91,9 @@ public class Level {
 		for (int y = 0; y < levelImage.getH(); y++) {
 			for (int x = 0; x < levelImage.getW(); x++) {
 
-				if (levelImage.getP()[x + y * levelImage.getW()] == 0xffff00ff) {
+				if(y == 0 || y == levelImage.getH()-1 || x == 0 || x == levelImage.getW()-1) {
+					GameManager.gm.collision[x + y * levelImage.getW()] = 1;
+				}else if (levelImage.getP()[x + y * levelImage.getW()] == 0xffff00ff) {
 					GameManager.gm.collision[x + y * levelImage.getW()] = -100;// player
 				} else if (levelImage.getP()[x + y * levelImage.getW()] == Color.BLACK.getRGB()) {// black
 					GameManager.gm.collision[x + y * levelImage.getW()] = 1; // collision block
