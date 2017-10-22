@@ -59,14 +59,15 @@ public class GameManager extends AbstractGame {
 	}
 
 	public static void main(String[] args) {
-		if (args.length == 1) {
+		if (args.length > 0) {
 			IN_LEVEL_EDITOR = args[0].equalsIgnoreCase("true");
 		} else {
 			IN_LEVEL_EDITOR = false;
 		}
 
-		// System.out.println(IN_LEVEL_EDITOR);
+		
 		gc = new GameContainer(new GameManager());
+		if(IN_LEVEL_EDITOR) gc.gameState = GameState.GAME;
 		gc.start();
 	}
 
