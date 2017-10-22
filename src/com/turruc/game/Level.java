@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import com.turruc.engine.gfx.Image;
 import com.turruc.engine.gfx.ImageTile;
 import com.turruc.game.entities.GameObject;
+import com.turruc.game.entities.LargeEnemy;
 import com.turruc.game.entities.MeleeEnemy;
 import com.turruc.game.entities.Player;
 import com.turruc.game.entities.ResourceBall;
@@ -62,7 +63,8 @@ public class Level {
 				} else if (levelImage.getP()[x + y * levelImage.getW()] == 0xff6400ff) {// Purple
 					GameManager.gm.collision[x + y * levelImage.getW()] = 5;// ladder
 				} else if (levelImage.getP()[x + y * levelImage.getW()] == 0xff00ffff) {// teal
-					GameManager.getObjects().add(new MeleeEnemy(x, y)); //meleeEnemy
+					//GameManager.getObjects().add(new MeleeEnemy(x, y)); //meleeEnemy
+					GameManager.getObjects().add(new LargeEnemy(x, y)); //largeEnemy
 				}
 			}
 		}
@@ -113,7 +115,7 @@ public class Level {
 					GameManager.gm.collision[x + y * levelImage.getW()] = 5;// ladder
 				} else if (levelImage.getP()[x + y * levelImage.getW()] == 0xff00ffff) {// teal
 					//GameManager.getObjects().add(new MeleeEnemy(x, y)); //meleeEnemy
-					GameManager.getObjects().add(new MeleeEnemy(x, y)); //meleeEnemy
+					GameManager.getObjects().add(new LargeEnemy(x, y)); //largeEnemy
 
 				}
 			}
