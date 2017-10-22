@@ -24,6 +24,7 @@ public class Image {
 		} catch(IllegalArgumentException e1) {
 			System.err.println("Could not find file: " + path);
 			e1.printStackTrace();
+			return;
 		}
 
 		w = image.getWidth();

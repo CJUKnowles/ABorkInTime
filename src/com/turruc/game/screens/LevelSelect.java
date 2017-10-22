@@ -1,5 +1,7 @@
 package com.turruc.game.screens;
 
+import java.io.File;
+
 import com.turruc.engine.AbstractGame;
 import com.turruc.engine.GameContainer;
 import com.turruc.engine.Renderer;
@@ -22,7 +24,7 @@ public class LevelSelect extends AbstractGame {
 	Level levelToLoad;
 
 	private SoundClip click;
-	
+
 	int selected = -1;
 
 	public LevelSelect() {
@@ -39,14 +41,50 @@ public class LevelSelect extends AbstractGame {
 
 		// TODO: load levels from a file into levels array
 		for (int i = 1; i <= 12; i++) {
-			try {
-				String path = "/levels/level" + i;
-				levels[i - 1] = new Level(new Image(path + "/levelImage.png"), new Image(path + "/background.png"), new Image(path + "/midground.png"), "dirt", new Image(path + "/levelPreview.png"));
-			} catch (Exception e) {
+			String path = "/levels/level" + i;
 
+			boolean correct = checkFiles(path);
+			if(correct) {
+				levels[i - 1] = new Level(new Image(path + "/levelImage.png"), new Image(path + "/background.png"), new Image(path + "/midground.png"), "dirt", new Image(path + "/levelPreview.png"));
 			}
 
 		}
+	}
+
+	private boolean checkFiles(String path) {
+		File file = new File("");
+		
+		path = file.getAbsolutePath() + File.separator + "resources" + path;
+		File folder = new File(path);
+		if(!folder.exists()) {
+			System.err.println("Cannot find folder at " + path);
+			return false;
+		}
+
+		File levelImage = new File(path + "/levelImage.png");
+		if(!levelImage.exists()) {
+			System.err.println("Cannot find levelImage.png");
+			return false;
+		}
+
+		File background = new File(path + "/background.png");
+		if(!background.exists()) {
+			System.err.println("Cannot find background.png");
+			return false;
+		}
+
+		File midground = new File(path + "/midground.png");
+		if(!midground.exists()) {
+			System.err.println("Cannot find midground.png");
+			return false;
+		}
+
+		File levelPreview = new File(path + "/levelPreview.png");
+		if(!levelPreview.exists()) {
+			System.err.println("Cannot find levelPreview.png");
+			return false;
+		}
+		return true;
 	}
 
 	@Override
