@@ -52,7 +52,7 @@ public class GameManager extends AbstractGame {
 		level = new Level(new Image("/levels/levelExample/levelExample.png"), new Image("/levels/levelExample/backgroundExample.png"), new Image("/levels/levelExample/midgroundExample.png"), "dirt");
 		level.loadLevel();
 		camera = new Camera(EntityType.player);
-		dirt = new ImageTile("/caveTileset.png", 32, 32);
+		dirt = new ImageTile("/dirtTileset.png", 32, 32);
 		platform = new Image("/platform.png");
 		lava = new ImageTile("/lava.png", 32, 32);
 		ladder = new Image("/ladder.png");

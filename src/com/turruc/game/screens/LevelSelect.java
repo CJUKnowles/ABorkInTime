@@ -14,7 +14,7 @@ import com.turruc.game.Level;
 
 public class LevelSelect extends AbstractGame {
 	private static GameContainer gc;
-	private Image levelSelect = new Image("/levelSelect.png");
+	private Image levelSelect;
 	Button[] buttons;
 	static Level[] levels;
 
@@ -28,6 +28,7 @@ public class LevelSelect extends AbstractGame {
 	int selected = -1;
 
 	public LevelSelect() {
+		levelSelect = new Image("/levelSelect.png");
 		levels = new Level[12];
 		buttons = new Button[12];
 		click = new SoundClip("/audio/click.wav");
