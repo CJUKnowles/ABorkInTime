@@ -47,8 +47,8 @@ public class MeleeEnemy extends GameObject {
 	private boolean attacking = false;
 	private float attackAnim = 4;
 
-	private SoundClip ugh;
-	private SoundClip boof;
+	private static SoundClip ugh;
+	private static SoundClip boof;
 
 	private Player player;
 
@@ -71,7 +71,9 @@ public class MeleeEnemy extends GameObject {
 
 		player = GameManager.gm.getPlayer();
 
+		if(ugh == null)
 		ugh = new SoundClip("/audio/ugh.wav");
+		if(boof == null)
 		boof = new SoundClip("/audio/boof.wav");
 	}
 

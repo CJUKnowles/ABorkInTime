@@ -37,8 +37,8 @@ public class Turret extends GameObject {
 
 	private int manaReward = 20;
 	
-	private SoundClip pew;
-	private SoundClip boof;
+	private static SoundClip pew;
+	private static SoundClip boof;
 	
 	public Turret(int posX, int posY) {
 		Random random = new Random();
@@ -54,7 +54,9 @@ public class Turret extends GameObject {
 		this.height = 32;
 		this.player = GameManager.gm.getPlayer();
 		
+		if(pew == null)
 		pew = new SoundClip("/audio/pew.wav");
+		if(boof == null)
 		boof = new SoundClip("/audio/boof.wav");
 	}
 

@@ -19,7 +19,7 @@ public class ResourceBall extends GameObject {
 
 	private int tileX;
 	private int tileY;
-	private SoundClip woosh;
+	private static SoundClip woosh;
 
 	public ResourceBall(GameManager gm, int tileX, int tileY, int type, int amount) {
 		this.tileX = tileX;
@@ -31,6 +31,7 @@ public class ResourceBall extends GameObject {
 		this.player = gm.getPlayer();
 
 		this.tag = EntityType.resourceBall;
+		if(woosh == null)
 		woosh = new SoundClip("/audio/woosh.wav");
 	}
 

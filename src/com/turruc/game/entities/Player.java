@@ -66,11 +66,11 @@ public class Player extends GameObject {
 	private boolean attacking = false;
 	private float attackAnim = 4;
 
-	private SoundClip ow;
-	private SoundClip pew;
-	private SoundClip woosh;
-	private SoundClip boof;
-	private SoundClip vshh;
+	private static SoundClip ow;
+	private static SoundClip pew;
+	private static SoundClip woosh;
+	private static SoundClip boof;
+	private static SoundClip vshh;
 
 	public Player(int posX, int posY) {
 		this.tag = EntityType.player;
@@ -86,10 +86,15 @@ public class Player extends GameObject {
 		this.padding = 4;
 		this.paddingTop = 0;
 
+		if(ow == null)
 		ow = new SoundClip("/audio/ow.wav");
+		if(pew == null)
 		pew = new SoundClip("/audio/pew.wav");
+		if(woosh == null)
 		woosh = new SoundClip("/audio/woosh.wav");
+		if(boof == null)
 		boof = new SoundClip("/audio/boof.wav");
+		if(vshh == null)
 		vshh = new SoundClip("/audio/vshh.wav");
 	}
 
