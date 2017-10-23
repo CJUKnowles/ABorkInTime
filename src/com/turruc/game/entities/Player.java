@@ -5,12 +5,14 @@ import java.awt.event.KeyEvent;
 import com.turruc.engine.GameContainer;
 import com.turruc.engine.Renderer;
 import com.turruc.engine.audio.SoundClip;
+import com.turruc.engine.gfx.Image;
 import com.turruc.engine.gfx.ImageTile;
 import com.turruc.game.GameManager;
 import com.turruc.game.GameState;
 
 public class Player extends GameObject {
 	private ImageTile player = new ImageTile("/player.png", 32, 32);
+	private ImageTile shield = new ImageTile("/shield.png", 32, 32);
 	private int padding, paddingTop;
 
 	private int direction = 0;
@@ -30,7 +32,7 @@ public class Player extends GameObject {
 	private boolean ground = false;
 	private boolean groundLast = false;
 
-	private int maxHealth = 100;
+	private int maxHealth = 50;
 	private int health = maxHealth;
 	private float maxMana = 100;
 	private float mana = 0;
@@ -66,12 +68,16 @@ public class Player extends GameObject {
 
 	private boolean attacking = false;
 	private float attackAnim = 4;
+	
+	private boolean shielded = false;
+	private float shieldAnim = 4;
 
 	private SoundClip ow;
 	private SoundClip pew;
 	private SoundClip woosh;
 	private SoundClip boof;
 	private SoundClip vshh;
+	private SoundClip pop;
 
 	public Player(int posX, int posY) {
 		this.tag = EntityType.player;
@@ -92,12 +98,14 @@ public class Player extends GameObject {
 		if (woosh == null) woosh = new SoundClip("/audio/woosh.wav");
 		if (boof == null) boof = new SoundClip("/audio/boof.wav");
 		if (vshh == null) vshh = new SoundClip("/audio/vshh.wav");
+		if (pop == null) pop = new SoundClip("/audio/pop.wav");
 	}
 
 	@Override
 	public void update(GameContainer gc, float dt) {
 		if (health == 0) {
 			boof.play();
+			shielded = false;
 			// this.dead = true;
 			health = maxHealth;
 			moveTo(5 * 32, 5 * 32);
@@ -389,6 +397,11 @@ public class Player extends GameObject {
 		}
 		// End of teleport
 
+		if (gc.getInput().isKeyDown(KeyEvent.VK_R) && !shielded && mana >= 80) {
+			shielded = true;
+			mana -= 80;
+		}
+		
 		// Final Position
 		if (offY > GameManager.TS / 2) {
 			tileY++;
@@ -423,6 +436,12 @@ public class Player extends GameObject {
 		// end of shooting
 
 		// Animation
+		if(shielded) {
+			shieldAnim += dt * animationSpeed;
+			if(shieldAnim > 4) {
+				shieldAnim = 0;
+			}
+		}
 		if (gc.getInput().isKey(KeyEvent.VK_D)) {
 			direction = 0;
 			anim += dt * animationSpeed;
@@ -458,11 +477,17 @@ public class Player extends GameObject {
 	}
 
 	public void hit(int damage) {
-		health -= damage;
-		if (health < 0) {
-			health = 0;
+		if(!shielded) {
+			health -= damage;
+			if (health < 0) {
+				health = 0;
+			}
+			ow.play();
+		} else {
+			pop.play();
+			shielded = false;
 		}
-		ow.play();
+		
 	}
 
 	@Override
@@ -495,6 +520,11 @@ public class Player extends GameObject {
 			} else {
 				r.drawImageTile(player, (int) teleportX, (int) teleportY, (int) anim, direction + 2);
 			}
+		}
+		
+		//shield
+		if(shielded) {
+			r.drawImageTile(shield, (int) posX, (int) posY, (int) shieldAnim, 0);
 		}
 	}
 

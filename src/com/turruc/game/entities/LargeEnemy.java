@@ -42,7 +42,7 @@ public class LargeEnemy extends GameObject {
 
 	private double lastTimeDamage;
 	private int damageCooldown = 1;
-	private int damage = 45;
+	private int damage = 25;
 
 	private boolean attacking = false;
 	private float attackAnim = 4;
