@@ -77,14 +77,22 @@ public class Bullet extends GameObject {
 		// if (GameManager.gm.getCollisionNum(tileX, tileY) == 2) {
 		for (int i = 0; i < GameManager.getObjects().size(); i++) {
 			if (GameManager.getObjects().get(i).getTag().equals(EntityType.turret) || GameManager.getObjects().get(i).getTag().equals(EntityType.meleeEnemy)) {
-				if (checkContact(this.posX, this.posY, GameManager.getObjects().get(i).getPosX(), GameManager.getObjects().get(i).getPosY())) {
+				if (this.checkContact(this.posX, this.posY, GameManager.getObjects().get(i).getPosX(), GameManager.getObjects().get(i).getPosY())) {
 					if (GameManager.getObjects().get(i).getTag().equals(EntityType.turret)) GameManager.getObjects().get(i).setDead(true); //kill turret
 					if (GameManager.getObjects().get(i).getTag().equals(EntityType.meleeEnemy)) ((MeleeEnemy) GameManager.getObjects().get(i)).hit(damage); //damage meleeEnemy
 					this.dead = true;
 					break;
 					// i = GameManager.gm.getObjects().size();
 				}
+				} else if (GameManager.getObjects().get(i).getTag().equals(EntityType.largeEnemy)) {
+					if (this.checkContactLarge(this.posX, this.posY, GameManager.getObjects().get(i).getPosX(), GameManager.getObjects().get(i).getPosY())) {
+						if (GameManager.getObjects().get(i).getTag().equals(EntityType.largeEnemy)) ((LargeEnemy) GameManager.getObjects().get(i)).hit(damage); //damage largeEnemy
+						this.dead = true;
+						break;
+					}
 				}
+			
+			
 		}
 			if (GameManager.gm.getCollisionNum(tileX, tileY) == 2) {
 				for (int i = 0; i < GameManager.getObjects().size(); i++) {

@@ -32,7 +32,6 @@ public class Level {
 		this.preview = preview;
 	}
 
-
 	public void updateLevel(GameManager gm) {
 
 		GameManager.gm.levelW = levelImage.getW();
@@ -42,9 +41,9 @@ public class Level {
 		for (int y = 0; y < levelImage.getH(); y++) {
 			for (int x = 0; x < levelImage.getW(); x++) {
 
-				if(y == 0 || y == levelImage.getH()-1 || x == 0 || x == levelImage.getW()-1) {
+				if (y == 0 || y == levelImage.getH() - 1 || x == 0 || x == levelImage.getW() - 1) {
 					GameManager.gm.collision[x + y * levelImage.getW()] = 1;
-				}else if (levelImage.getP()[x + y * levelImage.getW()] == 0xffff00ff) {
+				} else if (levelImage.getP()[x + y * levelImage.getW()] == 0xffff00ff) {
 					GameManager.gm.collision[x + y * levelImage.getW()] = -100;// player
 				} else if (levelImage.getP()[x + y * levelImage.getW()] == Color.BLACK.getRGB()) {// black
 					GameManager.gm.collision[x + y * levelImage.getW()] = 1; // collision block
@@ -52,8 +51,12 @@ public class Level {
 					GameManager.gm.collision[x + y * levelImage.getW()] = 0;// air
 				} else if (levelImage.getP()[x + y * levelImage.getW()] == Color.GREEN.getRGB()) {// green
 					GameManager.gm.collision[x + y * levelImage.getW()] = 2;// turret
-				} else if ((levelImage.getP()[x + y * levelImage.getW()] | 0xff000000) == Color.RED.getRGB()) {// red // | 0xff000000 removes alpha
-					GameManager.gm.collision[x + y * levelImage.getW()] = -1;// health ball 
+				} else if ((levelImage.getP()[x + y * levelImage.getW()] | 0xff000000) == Color.RED.getRGB()) {// red //
+					// |
+					// 0xff000000
+					// removes
+					// alpha
+					GameManager.gm.collision[x + y * levelImage.getW()] = -1;// health ball
 				} else if (levelImage.getP()[x + y * levelImage.getW()] == Color.BLUE.getRGB()) {// blue
 					GameManager.gm.collision[x + y * levelImage.getW()] = -2;// mana ball
 				} else if (levelImage.getP()[x + y * levelImage.getW()] == Color.YELLOW.getRGB()) {// yellow
@@ -63,39 +66,42 @@ public class Level {
 				} else if (levelImage.getP()[x + y * levelImage.getW()] == 0xff6400ff) {// Purple
 					GameManager.gm.collision[x + y * levelImage.getW()] = 5;// ladder
 				} else if (levelImage.getP()[x + y * levelImage.getW()] == 0xff00ffff) {// teal
-					//GameManager.getObjects().add(new MeleeEnemy(x, y)); //meleeEnemy
-					GameManager.getObjects().add(new LargeEnemy(x, y)); //largeEnemy
+					// GameManager.getObjects().add(new MeleeEnemy(x, y)); //meleeEnemy
+				} else if (levelImage.getP()[x + y * levelImage.getW()] == 0xff646400) {// teal
+					 GameManager.getObjects().add(new LargeEnemy(x, y)); //largeEnemy
 				}
+
 			}
 		}
 	}
+
 	public void loadLevel() {
 		GameManager.gm.levelW = levelImage.getW();
 		GameManager.gm.levelH = levelImage.getH();
 		GameManager.gm.collision = new int[GameManager.gm.levelW * GameManager.gm.levelH];
 
-		//Clearing the old objects array
+		// Clearing the old objects array
 		ArrayList<GameObject> toBeRemoved = new ArrayList<GameObject>();
-		for(GameObject obj : GameManager.getObjects()) {
-			if(obj instanceof Player) {
+		for (GameObject obj : GameManager.getObjects()) {
+			if (obj instanceof Player) {
 				continue;
 			}
-				obj.dispose();
-				toBeRemoved.add(obj);
+			obj.dispose();
+			toBeRemoved.add(obj);
 		}
-		
-		for(GameObject obj : toBeRemoved) {
+
+		for (GameObject obj : toBeRemoved) {
 			GameManager.getObjects().remove(obj);
 		}
 		toBeRemoved.clear();
-		//End clearing the old objects array
+		// End clearing the old objects array
 
 		for (int y = 0; y < levelImage.getH(); y++) {
 			for (int x = 0; x < levelImage.getW(); x++) {
 
-				if(y == 0 || y == levelImage.getH()-1 || x == 0 || x == levelImage.getW()-1) {
+				if (y == 0 || y == levelImage.getH() - 1 || x == 0 || x == levelImage.getW() - 1) {
 					GameManager.gm.collision[x + y * levelImage.getW()] = 1;
-				}else if (levelImage.getP()[x + y * levelImage.getW()] == 0xffff00ff) {
+				} else if (levelImage.getP()[x + y * levelImage.getW()] == 0xffff00ff) {
 					GameManager.gm.collision[x + y * levelImage.getW()] = -100;// player
 				} else if (levelImage.getP()[x + y * levelImage.getW()] == Color.BLACK.getRGB()) {// black
 					GameManager.gm.collision[x + y * levelImage.getW()] = 1; // collision block
@@ -104,7 +110,7 @@ public class Level {
 				} else if (levelImage.getP()[x + y * levelImage.getW()] == Color.GREEN.getRGB()) {// green
 					GameManager.gm.collision[x + y * levelImage.getW()] = 2;// turret
 				} else if ((levelImage.getP()[x + y * levelImage.getW()] | 0xff000000) == Color.RED.getRGB()) {// red | 0xff000000 removes alpha
-					GameManager.gm.collision[x + y * levelImage.getW()] = -1;// health ball 
+					GameManager.gm.collision[x + y * levelImage.getW()] = -1;// health ball
 				} else if (levelImage.getP()[x + y * levelImage.getW()] == Color.BLUE.getRGB()) {// blue
 					GameManager.gm.collision[x + y * levelImage.getW()] = -2;// mana ball
 				} else if (levelImage.getP()[x + y * levelImage.getW()] == Color.YELLOW.getRGB()) {// yellow
@@ -114,9 +120,9 @@ public class Level {
 				} else if (levelImage.getP()[x + y * levelImage.getW()] == 0xff6400ff) {// Purple
 					GameManager.gm.collision[x + y * levelImage.getW()] = 5;// ladder
 				} else if (levelImage.getP()[x + y * levelImage.getW()] == 0xff00ffff) {// teal
-					//GameManager.getObjects().add(new MeleeEnemy(x, y)); //meleeEnemy
-					GameManager.getObjects().add(new LargeEnemy(x, y)); //largeEnemy
-
+					GameManager.getObjects().add(new MeleeEnemy(x, y)); //meleeEnemy
+				} else if  (levelImage.getP()[x + y * levelImage.getW()] == 0xff646400) {
+					GameManager.getObjects().add(new LargeEnemy(x, y - 1)); //largeEnemy//-1 to offset the spawn position so he doesn't get stuck in the floor
 				}
 			}
 		}

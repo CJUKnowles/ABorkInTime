@@ -22,6 +22,13 @@ public abstract class GameObject {
 		return false;
 	}
 	
+	public boolean checkContactLarge(float posX, float posY, float posX2, float posY2) {
+		if (Math.abs((posX + GameManager.TS / 2) - (posX2 + GameManager.TS)) < GameManager.TS && Math.abs((posY + GameManager.TS / 2) - (posY2 + GameManager.TS)) < GameManager.TS * 2) {
+			return true;
+		}
+		return false;
+	}
+	
 	public EntityType getTag() {
 		return tag;
 	}

@@ -61,6 +61,7 @@ public class Player extends GameObject {
 	private boolean slow = false;
 	private boolean checkSlow = false;
 
+	private int meleeDamage = 100;
 	private int shootCost = 10;
 
 	private boolean attacking = false;
@@ -86,16 +87,11 @@ public class Player extends GameObject {
 		this.padding = 4;
 		this.paddingTop = 0;
 
-		if(ow == null)
-		ow = new SoundClip("/audio/ow.wav");
-		if(pew == null)
-		pew = new SoundClip("/audio/pew.wav");
-		if(woosh == null)
-		woosh = new SoundClip("/audio/woosh.wav");
-		if(boof == null)
-		boof = new SoundClip("/audio/boof.wav");
-		if(vshh == null)
-		vshh = new SoundClip("/audio/vshh.wav");
+		if (ow == null) ow = new SoundClip("/audio/ow.wav");
+		if (pew == null) pew = new SoundClip("/audio/pew.wav");
+		if (woosh == null) woosh = new SoundClip("/audio/woosh.wav");
+		if (boof == null) boof = new SoundClip("/audio/boof.wav");
+		if (vshh == null) vshh = new SoundClip("/audio/vshh.wav");
 	}
 
 	@Override
@@ -104,12 +100,7 @@ public class Player extends GameObject {
 			boof.play();
 			// this.dead = true;
 			health = maxHealth;
-			this.posX = 64 * 2;
-			this.posX = 64 * 2;
-			this.offX = 0;
-			this.offX = 0;
-			this.tileX = 2 * 2;
-			this.tileY = 2 * 2;
+			moveTo(5 * 32, 5 * 32);
 		}
 
 		// slow motion
@@ -207,7 +198,20 @@ public class Player extends GameObject {
 				for (int i = 0; i < GameManager.getObjects().size(); i++) {
 					if (GameManager.getObjects().get(i).getTag().equals(EntityType.turret) || GameManager.getObjects().get(i).getTag().equals(EntityType.meleeEnemy)) {
 						if (checkContact(this.posX + 20, this.posY, GameManager.getObjects().get(i).getPosX(), GameManager.getObjects().get(i).getPosY())) {
-							GameManager.getObjects().get(i).setDead(true);
+							if (GameManager.getObjects().get(i).getTag().equals(EntityType.turret)) GameManager.getObjects().get(i).setDead(true); // kill
+							// turret
+							if (GameManager.getObjects().get(i).getTag().equals(EntityType.meleeEnemy)) ((MeleeEnemy) GameManager.getObjects().get(i)).hit(meleeDamage); // damage
+							// meleeEnemy
+							break;
+							// i = GameManager.gm.getObjects().size();
+						}
+
+					}
+					if (GameManager.getObjects().get(i).getTag().equals(EntityType.largeEnemy)) {
+
+						if (checkContactLarge(this.posX + 20, this.posY, GameManager.getObjects().get(i).getPosX(), GameManager.getObjects().get(i).getPosY())) {
+							if (GameManager.getObjects().get(i).getTag().equals(EntityType.largeEnemy)) ((LargeEnemy) GameManager.getObjects().get(i)).hitMelee(meleeDamage); // damage
+							// largeEnemy
 							break;
 							// i = GameManager.gm.getObjects().size();
 						}
@@ -218,12 +222,23 @@ public class Player extends GameObject {
 				for (int i = 0; i < GameManager.getObjects().size(); i++) {
 					if (GameManager.getObjects().get(i).getTag().equals(EntityType.turret) || GameManager.getObjects().get(i).getTag().equals(EntityType.meleeEnemy)) {
 						if (checkContact(this.posX - 20, this.posY, GameManager.getObjects().get(i).getPosX(), GameManager.getObjects().get(i).getPosY())) {
-							GameManager.getObjects().get(i).setDead(true);
+							if (GameManager.getObjects().get(i).getTag().equals(EntityType.turret)) GameManager.getObjects().get(i).setDead(true); // kill
+							// turret
+							if (GameManager.getObjects().get(i).getTag().equals(EntityType.meleeEnemy)) ((MeleeEnemy) GameManager.getObjects().get(i)).hit(meleeDamage); // damage
+							// meleeEnemy
 							break;
 							// i = GameManager.gm.getObjects().size();
 						}
 					}
 
+					if (GameManager.getObjects().get(i).getTag().equals(EntityType.largeEnemy)) {
+						if (checkContactLarge(this.posX - 20, this.posY, GameManager.getObjects().get(i).getPosX(), GameManager.getObjects().get(i).getPosY())) {
+							if (GameManager.getObjects().get(i).getTag().equals(EntityType.largeEnemy)) ((LargeEnemy) GameManager.getObjects().get(i)).hitMelee(meleeDamage); // damage
+							// largeEnemy
+							break;
+							// i = GameManager.gm.getObjects().size();
+						}
+					}
 				}
 			}
 		}

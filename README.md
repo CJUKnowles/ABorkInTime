@@ -40,6 +40,7 @@ Java game made for fun!
 		* Anything below 155 will subtract mana
 	* Yellow: Lava 0xffffff00
 	* Brown: Platform 0xff963200
+	* Dark Yellow/Green: LargeEnemy 0xff646400
 	* Other: Air 
 		
 * Turrets will automatically attach to the nearest surface

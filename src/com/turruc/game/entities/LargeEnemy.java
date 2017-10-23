@@ -7,7 +7,7 @@ import com.turruc.engine.gfx.ImageTile;
 import com.turruc.game.GameManager;
 
 public class LargeEnemy extends GameObject {
-	private ImageTile meleeEnemy = new ImageTile("/largeEnemy.png", 64, 64);
+	private ImageTile meleeEnemy = new ImageTile("/largeSheet.png", 64, 64);
 	private int padding, paddingTop;
 
 	private int direction = 1;
@@ -15,22 +15,22 @@ public class LargeEnemy extends GameObject {
 	private int tileX, tileY;
 	private float offX, offY;
 
-	private float normalSpeed = 100;
+	private float normalSpeed = 80;
 	private float slowSpeed = normalSpeed / slowMotion;
 	private float speed = normalSpeed;
 
 	private float fallDistance = 0;
-	private float normalFallSpeed = 25;
+	private float normalFallSpeed = 15;
 	private float slowFallSpeed = normalFallSpeed / slowMotion;
 	private float fallSpeed = normalFallSpeed;
-	private float jump = -7; // must be negative
+	private float jump = -5; // must be negative
 	private boolean ground = false;
 	private boolean groundLast = false;
 
-	private int maxHealth = 100;
+	private int maxHealth = 400;
 	private int health = maxHealth;
 
-	private int normalAnimationSpeed = 10;
+	private int normalAnimationSpeed = 6;
 	private int slowAnimationSpeed = normalAnimationSpeed / slowMotion;
 	private int animationSpeed = normalAnimationSpeed;
 
@@ -42,7 +42,7 @@ public class LargeEnemy extends GameObject {
 
 	private double lastTimeDamage;
 	private int damageCooldown = 1;
-	private int damage = 25;
+	private int damage = 45;
 
 	private boolean attacking = false;
 	private float attackAnim = 4;
@@ -54,6 +54,8 @@ public class LargeEnemy extends GameObject {
 
 	private int manaReward = 20;
 	private int range = 60;
+	
+	private int timeLastHit = 0;
 
 	public LargeEnemy(int posX, int posY) {
 		this.tag = EntityType.largeEnemy;
@@ -63,8 +65,8 @@ public class LargeEnemy extends GameObject {
 		this.offY = 0;
 		this.posX = posX * GameManager.TS;
 		this.posY = posY * GameManager.TS;
-		this.width = 64;
-		this.height = 64;
+		width = 64;
+		height = 64;
 
 		this.padding = 0;
 		this.paddingTop = 0;
@@ -158,7 +160,15 @@ public class LargeEnemy extends GameObject {
 			}
 
 			// Beginning Left and right
-			if (GameManager.gm.getPlayer().getPosX() - GameManager.TS/2 > this.posX - GameManager.TS && Math.abs(GameManager.gm.getPlayer().getPosX() - this.posX) > GameManager.TS / 2) {
+			
+			//right
+			if(GameManager.gm.getPlayer().getPosX() + GameManager.TS/2 > this.posX + GameManager.TS ) {
+				direction = 0;
+			} else {
+				direction = 1;
+			}
+			
+			if (GameManager.gm.getPlayer().getPosX()  > this.posX + 48 && Math.abs(GameManager.gm.getPlayer().getPosX() - this.posX + 48) > GameManager.TS / 2) {
 				if (GameManager.gm.getCollision(tileX + 1, tileY) || GameManager.gm.getCollision(tileX + 1, tileY + (int) Math.signum((int) offY))) {
 					offX += dt * speed;
 					if (offX > padding) {
@@ -184,14 +194,12 @@ public class LargeEnemy extends GameObject {
 						offX = padding;
 					}
 				} else {
-					direction = 0;
 					offX += dt * speed;
 					againstWall = false;
 				}
-			} else
-
-			if (GameManager.gm.getPlayer().getPosX() - GameManager.TS/2 < this.posX + GameManager.TS && Math.abs(GameManager.gm.getPlayer().getPosX() - this.posX) > GameManager.TS / 2) {
-				System.out.println("test");
+				
+			//left
+			} else  if (GameManager.gm.getPlayer().getPosX() + 16 < this.posX + GameManager.TS && Math.abs(GameManager.gm.getPlayer().getPosX() - this.posX) > GameManager.TS / 2) {
 				if (GameManager.gm.getCollision(tileX - 1, tileY) || GameManager.gm.getCollision(tileX - 1, tileY + (int) Math.signum((int) offY))) {
 					offX -= dt * speed;
 					if (offX < -padding) {
@@ -221,13 +229,12 @@ public class LargeEnemy extends GameObject {
 					}
 
 				} else {
-					direction = 1;
 					offX -= dt * speed;
 					againstWall = false;
 				}
 			}
 			
-			if(Math.abs(GameManager.gm.getPlayer().getPosX() - this.posX) < GameManager.TS / 2) {
+			if(Math.abs(GameManager.gm.getPlayer().getPosX() - this.posX - GameManager.TS/2) < GameManager.TS) {
 				againstWall = false;
 			}
 			
@@ -236,11 +243,13 @@ public class LargeEnemy extends GameObject {
 			// Beginning Jump and Gravity
 			fallDistance += dt * fallSpeed;
 
+			//jump
 			if (GameManager.gm.getPlayer().getPosY() < this.posY - (GameManager.TS * 2) && ground && Math.abs(this.posX + GameManager.TS - GameManager.gm.getPlayer().getPosX()) < 32) {
 				fallDistance += jump;
 				ground = false;
 			}
 
+			//
 			if (ground && (againstWall || GameManager.gm.getCollisionNum((int) tileX, (int) tileY) == 3)) {
 				fallDistance += jump;
 				ground = false;
@@ -262,6 +271,7 @@ public class LargeEnemy extends GameObject {
 
 			}
 
+			//clipping into floor
 			if (fallDistance < 0) {
 				if ((GameManager.gm.getCollision(tileX, tileY - 1) || GameManager.gm.getCollision(tileX + (int) Math.signum((int) Math.abs(offX) > padding ? offX : 0), tileY - 1)) && offY < -paddingTop) {
 					fallDistance = 0;
@@ -280,15 +290,7 @@ public class LargeEnemy extends GameObject {
 
 			if (fallDistance > 0) {
 
-				if ((GameManager.gm.getCollision(tileX, tileY + 1) || GameManager.gm.getCollisionNum(tileX, tileY + 1) == 4 || GameManager.gm.getCollision(tileX + (int) Math.signum((int) Math.abs(offX) > padding ? offX : 0), tileY + 1)) && offY > 0) {
-					fallDistance = 0;
-					offY = 0;
-					ground = true;
-				} else if ((GameManager.gm.getCollision(tileX + 1, tileY + 1) || GameManager.gm.getCollisionNum(tileX + 1, tileY + 1) == 4 || GameManager.gm.getCollision(tileX + 1 + (int) Math.signum((int) Math.abs(offX) > padding ? offX : 0), tileY + 1)) && offY > 0) {
-					fallDistance = 0;
-					offY = 0;
-					ground = true;
-				} else if ((GameManager.gm.getCollision(tileX, tileY + 1 + 1) || GameManager.gm.getCollisionNum(tileX, tileY + 1 + 1) == 4 || GameManager.gm.getCollision(tileX + (int) Math.signum((int) Math.abs(offX) > padding ? offX : 0), tileY + 1+ 1)) && offY > 0) {
+				if ((GameManager.gm.getCollision(tileX, tileY + 1 + 1) || GameManager.gm.getCollisionNum(tileX, tileY + 1 + 1) == 4 || GameManager.gm.getCollision(tileX + (int) Math.signum((int) Math.abs(offX) > padding ? offX : 0), tileY + 1+ 1)) && offY > 0) {
 					fallDistance = 0;
 					offY = 0;
 					ground = true;
@@ -387,6 +389,17 @@ public class LargeEnemy extends GameObject {
 		}
 		ugh.play();
 	}
+	
+	public void hitMelee(int damage) {
+		if((int)System.currentTimeMillis() - timeLastHit > 300) {
+			timeLastHit = (int) System.currentTimeMillis(); 
+		health -= damage;
+		if (health < 0) {
+			health = 0;
+		}
+		ugh.play();
+		}
+	}
 
 	@Override
 	public void render(GameContainer gc, Renderer r) {
@@ -415,6 +428,13 @@ public class LargeEnemy extends GameObject {
 		this.dead = dead;
 		player.setMana(player.getMana() + manaReward);
 		ugh.play();
+	}
+	
+	public boolean checkBulletContact(float posX, float posY, float posX2, float posY2) {
+		if (Math.abs((posX + GameManager.TS / 2) - (posX2 + GameManager.TS)) < GameManager.TS && Math.abs((posY + GameManager.TS / 2) - (posY2 + GameManager.TS)) < GameManager.TS) {
+			return true;
+		}
+		return false;
 	}
 
 	public int getHealth() {

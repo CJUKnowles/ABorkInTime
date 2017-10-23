@@ -12,7 +12,6 @@ import com.turruc.engine.gfx.ImageTile;
 import com.turruc.game.entities.EntityType;
 import com.turruc.game.entities.GameObject;
 import com.turruc.game.entities.Player;
-import com.turruc.game.screens.Menu;
 
 public class GameManager extends AbstractGame {
 	private static GameContainer gc;
