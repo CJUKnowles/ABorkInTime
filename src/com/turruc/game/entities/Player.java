@@ -228,12 +228,14 @@ public class Player extends GameObject {
 				}
 			} else if (direction == 1) {
 				for (int i = 0; i < GameManager.getObjects().size(); i++) {
-					if (GameManager.getObjects().get(i).getTag().equals(EntityType.turret) || GameManager.getObjects().get(i).getTag().equals(EntityType.meleeEnemy)) {
+					if (GameManager.getObjects().get(i).getTag().equals(EntityType.turret) || GameManager.getObjects().get(i).getTag().equals(EntityType.meleeEnemy) || GameManager.getObjects().get(i).getTag().equals(EntityType.floatEnemy)) {
 						if (checkContact(this.posX - 20, this.posY, GameManager.getObjects().get(i).getPosX(), GameManager.getObjects().get(i).getPosY())) {
 							if (GameManager.getObjects().get(i).getTag().equals(EntityType.turret)) GameManager.getObjects().get(i).setDead(true); // kill
 							// turret
 							if (GameManager.getObjects().get(i).getTag().equals(EntityType.meleeEnemy)) ((MeleeEnemy) GameManager.getObjects().get(i)).hit(meleeDamage); // damage
 							// meleeEnemy
+							if (GameManager.getObjects().get(i).getTag().equals(EntityType.floatEnemy)) ((FloatEnemy) GameManager.getObjects().get(i)).hit(meleeDamage); // damage
+							// floatEnemy
 							break;
 							// i = GameManager.gm.getObjects().size();
 						}

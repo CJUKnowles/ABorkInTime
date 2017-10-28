@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import com.turruc.engine.gfx.Image;
 import com.turruc.engine.gfx.ImageTile;
+import com.turruc.game.entities.FloatEnemy;
 import com.turruc.game.entities.GameObject;
 import com.turruc.game.entities.LargeEnemy;
 import com.turruc.game.entities.MeleeEnemy;
@@ -66,7 +67,9 @@ public class Level {
 				} else if (levelImage.getP()[x + y * levelImage.getW()] == 0xff6400ff) {// Purple
 					GameManager.gm.collision[x + y * levelImage.getW()] = 5;// ladder
 				} else if (levelImage.getP()[x + y * levelImage.getW()] == 0xff00ffff) {// teal
-					// GameManager.getObjects().add(new MeleeEnemy(x, y)); //meleeEnemy
+					 GameManager.getObjects().add(new MeleeEnemy(x, y)); //meleeEnemy
+				} else if (levelImage.getP()[x + y * levelImage.getW()] == 0xff6464ff) {// Purplish blue
+					 GameManager.getObjects().add(new FloatEnemy(x, y)); //floatEnemy
 				} else if (levelImage.getP()[x + y * levelImage.getW()] == 0xff646400) {// teal
 					 GameManager.getObjects().add(new LargeEnemy(x, y)); //largeEnemy
 				}
@@ -121,8 +124,11 @@ public class Level {
 					GameManager.gm.collision[x + y * levelImage.getW()] = 5;// ladder
 				} else if (levelImage.getP()[x + y * levelImage.getW()] == 0xff00ffff) {// teal
 					GameManager.getObjects().add(new MeleeEnemy(x, y)); //meleeEnemy
+				} else if (levelImage.getP()[x + y * levelImage.getW()] == 0xff6464ff) {// teal
+					GameManager.getObjects().add(new FloatEnemy(x, y)); //floatEnemy
 				} else if  (levelImage.getP()[x + y * levelImage.getW()] == 0xff646400) {
 					GameManager.getObjects().add(new LargeEnemy(x, y - 1)); //largeEnemy//-1 to offset the spawn position so he doesn't get stuck in the floor
+					System.out.println("meme");
 				}
 			}
 		}

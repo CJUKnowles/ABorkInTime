@@ -44,6 +44,8 @@ public class EnemyBullet extends GameObject {
 			speed = normalSpeed;
 		}
 
+		
+		
 		this.xVelocity = speed * Math.cos(angle);
 		this.yVelocity = speed * Math.sin(angle);
 
