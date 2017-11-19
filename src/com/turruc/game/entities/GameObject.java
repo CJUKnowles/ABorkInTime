@@ -29,6 +29,8 @@ public abstract class GameObject {
 		return false;
 	}
 	
+	
+	
 	public EntityType getTag() {
 		return tag;
 	}
