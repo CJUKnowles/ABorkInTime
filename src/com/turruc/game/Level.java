@@ -40,8 +40,7 @@ public class Level {
 		GameManager.gm.collision = new int[GameManager.gm.levelW * GameManager.gm.levelH];
 
 		for (int y = 0; y < levelImage.getH(); y++) {
-			for (int x = 0; x < levelImage.getW(); x++) {
-
+			for (int x = 0; x < levelImage.getW(); x++)
 				if (y == 0 || y == levelImage.getH() - 1 || x == 0 || x == levelImage.getW() - 1) {
 					GameManager.gm.collision[x + y * levelImage.getW()] = 1;
 				} else if (levelImage.getP()[x + y * levelImage.getW()] == 0xffff00ff) {
@@ -76,7 +75,7 @@ public class Level {
 
 			}
 		}
-	}
+	
 
 	public void loadLevel() {
 		GameManager.gm.levelW = levelImage.getW();
@@ -122,11 +121,15 @@ public class Level {
 					GameManager.gm.collision[x + y * levelImage.getW()] = 4;// platform
 				} else if (levelImage.getP()[x + y * levelImage.getW()] == 0xff6400ff) {// Purple
 					GameManager.gm.collision[x + y * levelImage.getW()] = 5;// ladder
+				} else if (levelImage.getP()[x + y * levelImage.getW()] == 0xff606060) {// Grey
+					GameManager.gm.collision[x + y * levelImage.getW()] = 6;// spike
+				} else if (levelImage.getP()[x + y * levelImage.getW()] == 0xff965D00) {// Brown (wood)
+					GameManager.gm.collision[x + y * levelImage.getW()] = 7;// Door
 				} else if (levelImage.getP()[x + y * levelImage.getW()] == 0xff00ffff) {// teal
 					GameManager.getObjects().add(new MeleeEnemy(x, y)); //meleeEnemy
-				} else if (levelImage.getP()[x + y * levelImage.getW()] == 0xff6464ff) {// teal
+				} else if (levelImage.getP()[x + y * levelImage.getW()] == 0xff6464ff) {// Purple/blue
 					GameManager.getObjects().add(new FloatEnemy(x, y)); //floatEnemy
-				} else if  (levelImage.getP()[x + y * levelImage.getW()] == 0xff646400) {
+				} else if  (levelImage.getP()[x + y * levelImage.getW()] == 0xff646400) { //Dark Green
 					GameManager.getObjects().add(new LargeEnemy(x, y - 1)); //largeEnemy//-1 to offset the spawn position so he doesn't get stuck in the floor
 					System.out.println("meme");
 				}

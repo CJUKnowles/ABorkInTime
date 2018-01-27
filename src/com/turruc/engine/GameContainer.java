@@ -1,6 +1,7 @@
 package com.turruc.engine;
 
 import com.turruc.game.GameState;
+import com.turruc.game.screens.EndScreen;
 import com.turruc.game.screens.LevelSelect;
 import com.turruc.game.screens.Menu;
 
@@ -16,6 +17,7 @@ public class GameContainer implements Runnable {
 	
 	Menu menu = new Menu();
 	LevelSelect levelSelect = new LevelSelect();
+	EndScreen endScreen = new EndScreen();
 	
 	private boolean running = false;
 	private final double UPDATE_CAP = 1.0 / 60.0;
@@ -79,6 +81,10 @@ public class GameContainer implements Runnable {
 					menu.update(this, (float) UPDATE_CAP);	
 				} else if(gameState == GameState.LEVELS) {
 					levelSelect.update(this, (float) UPDATE_CAP);	
+				} else if(gameState == GameState.GAMEOVER) {
+					endScreen.update(this, (float) UPDATE_CAP);	
+				} else if(gameState == GameState.VICTORY) {
+					endScreen.update(this, (float) UPDATE_CAP);	
 				}
 
 				input.update();
@@ -98,6 +104,12 @@ public class GameContainer implements Runnable {
 					menu.render(this, renderer);
 				} else if(gameState == GameState.LEVELS) {
 					levelSelect.render(this, renderer);
+				} else if(gameState == GameState.GAMEOVER) {
+					EndScreen.win = false;
+					endScreen.render(this, renderer);
+				} else if(gameState == GameState.VICTORY) {
+					EndScreen.win = true;
+					endScreen.render(this, renderer);
 				}
 				renderer.process();
 				renderer.setCamX(0);

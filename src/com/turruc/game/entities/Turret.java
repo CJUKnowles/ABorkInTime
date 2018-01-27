@@ -17,9 +17,9 @@ public class Turret extends GameObject {
 
 	private int tileX, tileY;
 	private float offX, offY;
-	private int normalFireRate = 70;
+	private int normalFireRate = 40;
 	private int slowFireRate = normalFireRate * slowMotion;
-	private int fireRate = 70; // Smaller = faster firerate //70
+	private int fireRate = normalFireRate; // Smaller = faster firerate //70
 	private int timeUntilNextShot = fireRate;
 	private double angle = 0;
 	private double angle2;

@@ -14,7 +14,6 @@ import com.turruc.game.GameState;
 public class Menu extends AbstractGame {
 	private static GameContainer gc;
 
-	Button play;
 	Button quit;
 	Button levelSelect;
 	Button levelEditor;
@@ -24,7 +23,6 @@ public class Menu extends AbstractGame {
 	private Image menu = new Image("/menu.png");
 
 	public Menu() {
-		play = new Button(90, 140, 240, 95, 0xffffffff, "Play");
 		quit = new Button(90, 265, 240, 95, 0xffffffff, "Quit");
 		levelSelect = new Button(480, 265, 240, 95, 0xffffffff, "level select");
 		levelEditor = new Button(480, 140, 240, 95, 0xffffffff, "level editor");
@@ -40,10 +38,7 @@ public class Menu extends AbstractGame {
 	@Override
 	public void update(GameContainer gc, float dt) {
 		if (gc.getInput().isButtonDown(1)) {
-			if (play.mouseIsOver(gc.getInput().getMouseX(), gc.getInput().getMouseY())) {
-				click.play();
-				gc.gameState = GameState.GAME;
-			} else if (quit.mouseIsOver(gc.getInput().getMouseX(), gc.getInput().getMouseY())) {
+			if (quit.mouseIsOver(gc.getInput().getMouseX(), gc.getInput().getMouseY())) {
 				click.play();
 
 				System.exit(0);

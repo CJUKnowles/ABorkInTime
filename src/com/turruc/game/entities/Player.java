@@ -5,7 +5,6 @@ import java.awt.event.KeyEvent;
 import com.turruc.engine.GameContainer;
 import com.turruc.engine.Renderer;
 import com.turruc.engine.audio.SoundClip;
-import com.turruc.engine.gfx.Image;
 import com.turruc.engine.gfx.ImageTile;
 import com.turruc.game.GameManager;
 import com.turruc.game.GameState;
@@ -58,7 +57,9 @@ public class Player extends GameObject {
 
 	private double lastTimeLavaDamage;
 	private int lavaDamageCooldown = 1;
-	private int lavaDamage = 10;
+	private int lavaDamage = 200;
+
+	private int spikeDamage = 200;
 
 	private boolean slow = false;
 	private boolean checkSlow = false;
@@ -68,7 +69,7 @@ public class Player extends GameObject {
 
 	private boolean attacking = false;
 	private float attackAnim = 4;
-	
+
 	private boolean shielded = false;
 	private float shieldAnim = 4;
 
@@ -106,9 +107,10 @@ public class Player extends GameObject {
 		if (health == 0) {
 			boof.play();
 			shielded = false;
-			// this.dead = true;
+			gc.gameState = GameState.GAMEOVER;
 			health = maxHealth;
-			moveTo(5 * 32, 5 * 32);
+			mana = 0;
+			moveTo(3 * 32, 5 * 32);
 		}
 
 		// slow motion
@@ -156,6 +158,21 @@ public class Player extends GameObject {
 		}
 		// end lava slow
 
+		// Spike Damage
+		if (GameManager.gm.getCollisionNum((int) tileX, (int) tileY) == 6) {
+			hit(spikeDamage);
+		}
+		// End of Spike Damage
+
+		// Victory Door
+		if (GameManager.gm.getCollisionNum((int) tileX, (int) tileY) == 7) {
+			gc.gameState = GameState.VICTORY;
+			health = maxHealth;
+			mana = 0;
+			moveTo(3 * 32, 5 * 32);
+		}
+		// End of Victory Door
+		
 		// resource balls
 		if (GameManager.gm.getCollisionNum((int) tileX, (int) tileY) == -1 || GameManager.gm.getCollisionNum((int) tileX, (int) tileY) == -2) {
 
@@ -204,7 +221,7 @@ public class Player extends GameObject {
 		if (attacking) {
 			if (direction == 0) {
 				for (int i = 0; i < GameManager.getObjects().size(); i++) {
-					if (GameManager.getObjects().get(i).getTag().equals(EntityType.turret) || GameManager.getObjects().get(i).getTag().equals(EntityType.meleeEnemy)  || GameManager.getObjects().get(i).getTag().equals(EntityType.floatEnemy)) {
+					if (GameManager.getObjects().get(i).getTag().equals(EntityType.turret) || GameManager.getObjects().get(i).getTag().equals(EntityType.meleeEnemy) || GameManager.getObjects().get(i).getTag().equals(EntityType.floatEnemy)) {
 						if (checkContact(this.posX + 20, this.posY, GameManager.getObjects().get(i).getPosX(), GameManager.getObjects().get(i).getPosY())) {
 							if (GameManager.getObjects().get(i).getTag().equals(EntityType.turret)) GameManager.getObjects().get(i).setDead(true); // kill
 							// turret
@@ -304,7 +321,7 @@ public class Player extends GameObject {
 		// end ladder
 
 		if (gc.getInput().isKey(KeyEvent.VK_S) && !ground) {
-			fallSpeed = fallSpeed * 3;
+			fallSpeed = fallSpeed * 4;
 		}
 
 		fallDistance += dt * fallSpeed;
@@ -405,7 +422,7 @@ public class Player extends GameObject {
 			shielded = true;
 			mana -= 80;
 		}
-		
+
 		// Final Position
 		if (offY > GameManager.TS / 2) {
 			tileY++;
@@ -440,9 +457,9 @@ public class Player extends GameObject {
 		// end of shooting
 
 		// Animation
-		if(shielded) {
+		if (shielded) {
 			shieldAnim += dt * animationSpeed;
-			if(shieldAnim > 4) {
+			if (shieldAnim > 4) {
 				shieldAnim = 0;
 			}
 		}
@@ -476,12 +493,12 @@ public class Player extends GameObject {
 		groundLast = ground;
 
 		if (gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) {
-			gc.gameState = GameState.MENU;
+			hit(999);
 		}
 	}
 
 	public void hit(int damage) {
-		if(!shielded) {
+		if (!shielded) {
 			health -= damage;
 			if (health < 0) {
 				health = 0;
@@ -491,7 +508,7 @@ public class Player extends GameObject {
 			pop.play();
 			shielded = false;
 		}
-		
+
 	}
 
 	@Override
@@ -525,9 +542,9 @@ public class Player extends GameObject {
 				r.drawImageTile(player, (int) teleportX, (int) teleportY, (int) anim, direction + 2);
 			}
 		}
-		
-		//shield
-		if(shielded) {
+
+		// shield
+		if (shielded) {
 			r.drawImageTile(shield, (int) posX, (int) posY, (int) shieldAnim, 0);
 		}
 	}

@@ -28,7 +28,9 @@ public class GameManager extends AbstractGame {
 	private Image platform;
 	private Image ladder;
 	private ImageTile lava;
+	private Image spikes;
 	private Player player;
+	private Image door;
 
 	public Level level;
 
@@ -39,19 +41,26 @@ public class GameManager extends AbstractGame {
 	public static boolean IN_LEVEL_EDITOR = false;
 	private float anim = 0;
 
+	public long timer = 0;
+	public static long startTime = 0;
+	public static long goalTime;
+	public static long levelTime = 120000;
+
 	public GameManager() {
 		if (gm == null) {
 			gm = this;
 		} else {
 			throw new IllegalStateException("Tried to create a new instance of GameManager");
 		}
-		player = new Player(8, 8);
+		player = new Player(3, 5);
 		getObjects().add(player);
 		level = new Level(new Image("/levels/levelExample/levelExample.png"), new Image("/levels/levelExample/backgroundExample.png"), new Image("/levels/levelExample/midgroundExample.png"), new ImageTile("/levels/levelExample/tilesetExample.png", 32, 32));
 		level.loadLevel();
 		camera = new Camera(EntityType.player);
 		platform = new Image("/platform.png");
 		lava = new ImageTile("/lava.png", 32, 32);
+		spikes = new Image("/spikes.png");
+		door = new Image("/door.png");
 		ladder = new Image("/ladder.png");
 	}
 
@@ -62,9 +71,8 @@ public class GameManager extends AbstractGame {
 			IN_LEVEL_EDITOR = false;
 		}
 
-		
 		gc = new GameContainer(new GameManager());
-		if(IN_LEVEL_EDITOR) gc.gameState = GameState.GAME;
+		if (IN_LEVEL_EDITOR) gc.gameState = GameState.GAME;
 		gc.start();
 	}
 
@@ -79,7 +87,7 @@ public class GameManager extends AbstractGame {
 		if (IN_LEVEL_EDITOR && gc.getInput().isKeyDown(KeyEvent.VK_F5)) {
 			level.updateLevel(this);
 		}
-		
+
 		for (int i = 0; i < getObjects().size(); i++) {
 			getObjects().get(i).update(gc, dt);
 			if (getObjects().get(i).isDead()) {
@@ -88,6 +96,9 @@ public class GameManager extends AbstractGame {
 			}
 		}
 		camera.update(gc, this, dt);
+		if (gc.gameState == GameState.GAME) {
+			timer = System.currentTimeMillis();
+		}
 	}
 
 	@Override
@@ -194,17 +205,41 @@ public class GameManager extends AbstractGame {
 				}
 				// end of drawing lava
 
+				// Drawing Spikes
+				if (collision[x + y * levelW] == 6) {
+					
+				
+				
+				int angle2 = 0;
+				if (GameManager.gm.getCollisionNum(x, y + 1) == 1) { // below
+					angle2 = 0;
+				} else if (GameManager.gm.getCollisionNum(x, y - 1) == 1) { // above
+					angle2 = 180;
+				} else if (GameManager.gm.getCollisionNum(x + 1, y) == 1) { // right
+					angle2 = 270;
+				} else if (GameManager.gm.getCollisionNum(x - 1, y) == 1) { // left
+					angle2 = 90;
+				} 
+				
+				r.drawImage(r.transformImage(spikes.getBufferedImage(), (int) angle2), (int) x * TS, (int) y * TS);
+				}
+				// End of Drawing Spikes
+				
+				// Drawing Door
+				if (collision[x + y * levelW] == 7) {
+					r.drawImage(door, x * TS, y * TS);
+				}
+				// End of Drawing Door
+				
 				// Drawing platforms
 				if (collision[x + y * levelW] == 4) {
 					r.drawImage(platform, x * TS, y * TS);
-
 				}
 				// end of drawing platforms
 
 				// Drawing ladders
 				if (collision[x + y * levelW] == 5) {
 					r.drawImage(ladder, x * TS, y * TS);
-
 				}
 				// end of drawing ladders
 
@@ -222,6 +257,13 @@ public class GameManager extends AbstractGame {
 		r.drawText("Shift: Teleport", (int) camera.getOffX(), 64, Color.WHITE.getRGB());
 		r.drawText("Ctrl: Slow Motion", (int) camera.getOffX(), 80, Color.WHITE.getRGB());
 
+		int seconds = (int) ((goalTime - timer) / 1000);
+		if (seconds % 60 < 10) {
+			r.drawText("Time: " + "0" + (seconds / 60) + ":" + "0" + (seconds % 60), (int) camera.getOffX(), 100, Color.WHITE.getRGB());
+		} else {
+			r.drawText("Time: " + "0" + (seconds / 60) + ":" + (seconds % 60), (int) camera.getOffX(), 100, Color.WHITE.getRGB());
+		}
+
 	}
 
 	public void addObject(GameObject object) {
@@ -238,7 +280,7 @@ public class GameManager extends AbstractGame {
 	}
 
 	public boolean getContact(int x, int y) {
-		return x < 0 || x >= levelW || y < 0 || y >= levelH || collision[x + y * levelW] == 1 || collision[x + y * levelW] == 2 || collision[x + y * levelW] == 3;
+		return x < 0 || x >= levelW || y < 0 || y >= levelH || collision[x + y * levelW] == 1 || collision[x + y * levelW] == 2 || collision[x + y * levelW] == 3 || collision[x + y * levelW] == 6;
 	}
 
 	public boolean getCollision(int x, int y) {

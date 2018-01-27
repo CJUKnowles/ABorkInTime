@@ -108,6 +108,8 @@ public class LevelSelect extends AbstractGame {
 					GameManager.gm.level = levelToLoad;
 					gc.gameState = GameState.GAME;					
 				}
+				GameManager.startTime = System.currentTimeMillis();
+				GameManager.goalTime = GameManager.startTime + GameManager.levelTime;
 			}
 			for (int i = 0; i < 12; i++) {
 				if (buttons[i].mouseIsOver(gc.getInput().getMouseX(), gc.getInput().getMouseY())) {
