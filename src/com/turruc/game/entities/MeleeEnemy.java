@@ -79,7 +79,7 @@ public class MeleeEnemy extends GameObject {
 	public void update(GameContainer gc, float dt) {
 		if (health <= 0) {
 			boof.play();
-			this.dead = true;
+			setDead(true);
 			health = maxHealth;
 			this.posX = 64;
 			this.posX = 64;

@@ -49,7 +49,7 @@ public class Player extends GameObject {
 
 	private float ladderSpeed = (float) .5;
 
-	private int normalAnimationSpeed = 10;
+	private int normalAnimationSpeed = 20;
 	private int slowAnimationSpeed = normalAnimationSpeed / slowMotion;
 	private int animationSpeed = normalAnimationSpeed;
 
@@ -104,6 +104,7 @@ public class Player extends GameObject {
 
 	@Override
 	public void update(GameContainer gc, float dt) {
+		mana = 100;
 		if (health == 0) {
 			boof.play();
 			shielded = false;
